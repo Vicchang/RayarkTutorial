@@ -1,18 +1,19 @@
-"Week1" 
-#Please explain SOLID principles of object-oriented programming.
+# Week1
 
-#When should we use inheritance, and when should we use composition?
+# Please explain SOLID principles of object-oriented programming.
 
-#What is dependency injection? What benefits does it brings?
+# When should we use inheritance, and when should we use composition?
 
-#What does coupling means? What’s the value of Law of Demeter?
+# What is dependency injection? What benefits does it brings?
 
-#What is side effects?
+# What does coupling means? What’s the value of Law of Demeter?
 
-#What is Test-Driven Development (TDD)?
+# What is side effects?
 
-#Why does unit test matter? How does unit test help for refactoring?
+# What is Test-Driven Development (TDD)?
 
-#By the arguments above, please analyze pros & cons of the singleton pattern.
+# Why does unit test matter? How does unit test help for refactoring?
 
-#What is Design by Contracts? Why should we crash as early as possible?
+# By the arguments above, please analyze pros & cons of the singleton pattern.
+
+# What is Design by Contracts? Why should we crash as early as possible?
