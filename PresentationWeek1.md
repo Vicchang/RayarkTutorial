@@ -57,7 +57,7 @@ public class Monster
     }
 }    
 ```
-#### Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle". The Monster class could decide if the class should go or not but should not decide how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, we seperate the logic or the responsibility to other class. Below is a simple code to illustate the idea.
+#### Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle". The Monster class decided not only Monster should go but also how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, we seperate the task or the responsibility to other class. Single responsibility principle encourages that one class should only do one task. Below is a simple code to illustate the idea.
 ```C#
 class Program
 {
