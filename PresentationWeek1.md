@@ -1,8 +1,8 @@
 # Week1
 ---
 ## Please explain SOLID principles of object-oriented programming.
-1. Single responsibility principle
-    ### Look at the code below. The Monster could go with specific way, which was X and Y plus one. 
+### 1. Single responsibility principle
+    Look at the code below. The Monster could go with specific way, which was X and Y plus one. 
     
     ```C#
     class Program
@@ -31,7 +31,7 @@
         }
     }
     ```
-    ### However, one day, someone requested that could the monster go with different way? The engineer quickly modified the code, which would be like below.
+    However, one day, someone requested that could the monster go with different way? The engineer quickly modified the code, which would be like below.
     
     ```C#
     class Program
@@ -58,9 +58,7 @@
         }
     }    
     ```
-    ### Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle".
-    ### The Monster class could decide if the class should go or not but should not decide how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, 
-    ### we seperate the logic or the responsibility to other class. Below is a simple code to illustate the idea.
+    Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle". The Monster class could decide if the class should go or not but should not decide how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, we seperate the logic or the responsibility to other class. Below is a simple code to illustate the idea.
     
     ```C#
     class Program
@@ -132,14 +130,14 @@
     }
     ```
     
-2. Open/closed principles
-*
-3. Liskov substitution principle
-*
-4. Interface segregation principle
-* 
-5. Dependency inversion priciple
-*
+### 2. Open/closed principles
+### *
+### 3. Liskov substitution principle
+### *
+### 4. Interface segregation principle
+### * 
+### 5. Dependency inversion priciple
+### *
 ## When should we use inheritance, and when should we use composition?
 ## What is dependency injection? What benefits does it brings?
 ## What does coupling means? What’s the value of Law of Demeter?
