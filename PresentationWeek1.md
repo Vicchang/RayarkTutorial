@@ -64,6 +64,63 @@ class Program
     static void Main(string[] args)
     {
         GameObject GO1 = new GameObject();
+        MoveBase Mm1 = new MonsterMove_v1(ref GO1);
+        Monster M1 = new Monster(ref Mm1);
+        M1.Go();
+    }
+} 
+
+public class Monster
+{
+    private MoveBase _move;
+
+    public Monster(ref MoveBase monsterMove)
+    {
+        _move = monsterMove;
+    }
+
+    public void Go()
+    {
+        IMove_v1 m = _move as IMove_v1;
+        m.Foward();
+    }
+}
+
+public abstract class MoveBase
+{
+    protected GameObject _m_GameObject;
+
+    public MoveBase(GameObject gameObject)
+    {
+        _m_GameObject = gameObject;
+    }
+}
+
+public interface IMove_v1
+{
+    void Foward();
+}
+
+public class MonsterMove_v2 : MoveBase, IMove_v1
+{
+    public MonsterMove_v2(ref GameObject gameObject) : base(gameObject) {}
+
+    void IMove_v1.Foward()
+    {
+        _m_GameObject.X = _m_GameObject.X + 2;
+        _m_GameObject.Y = _m_GameObject.Y + 2;
+    }
+}
+```
+
+### 2. Open/closed principles
+#### The basic idea is that "a module or clsaa is open for extension and close for modification". As you can see from above, Monster class is now responsible for one task. It is now easy to extend new move method without touching the original one. Please the example below.
+```C#
+class Program
+{
+    static void Main(string[] args)
+    {
+        GameObject GO1 = new GameObject();
         GameObject GO2 = new GameObject();
         MoveBase Mm1 = new MonsterMove_v1(ref GO1);
         MoveBase Mm2 = new MonsterMove_v2(ref GO2);
@@ -90,7 +147,7 @@ public class Monster
     }
 }
 
-    public class MoveBase
+public abstract class MoveBase
 {
     protected GameObject _m_GameObject;
 
@@ -127,9 +184,8 @@ public class MonsterMove_v1 : MoveBase, IMove_v1
     }
 }
 ```
-    
-### 2. Open/closed principles
-### *
+#### Now we have MonsterMove_v1 and MonsterMove_v2, we only need to decide which method should we use when we initialize Monster.
+
 ### 3. Liskov substitution principle
 ### *
 ### 4. Interface segregation principle
