@@ -221,7 +221,12 @@ public class MonsterMove_v1 : MoveBase, IMove_v1
     }
 }
 ```
-#### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but more a precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
+#### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, 
+#### there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never 
+#### walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is 
+#### "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but 
+#### a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
+
 ### 4. Interface segregation principle
 ### * 
 ### 5. Dependency inversion priciple
