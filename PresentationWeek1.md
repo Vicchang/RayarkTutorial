@@ -19,7 +19,7 @@ public class Monster
 {
     private GameObject _m_gameObject;
 
-    public Monster(ref GameObject gameObject)
+    public Monster(GameObject gameObject)
     {
         _m_gameObject = gameObject;
     }
@@ -74,7 +74,7 @@ public class Monster
 {
     private MoveBase _move;
 
-    public Monster(ref MoveBase monsterMove)
+    public Monster(MoveBase monsterMove)
     {
         _move = monsterMove;
     }
@@ -103,7 +103,7 @@ public interface IMove_v1
 
 public class MonsterMove_v2 : MoveBase, IMove_v1
 {
-    public MonsterMove_v2(ref GameObject gameObject) : base(gameObject) {}
+    public MonsterMove_v2(GameObject gameObject) : base(gameObject) {}
 
     void IMove_v1.Foward()
     {
@@ -114,7 +114,7 @@ public class MonsterMove_v2 : MoveBase, IMove_v1
 ```
 
 ### 2. Open/closed principles
-#### The basic idea is that "a module or clsaa is open for extension and close for modification". As you can see from above, Monster class is now responsible for one task. It is now easy to extend new move method without touching the original one. Please the example below.
+#### The basic idea is that "a module or clsaa is open for extension and close for modification". As you can see from above, Monster class is now responsible for one task. It is now easy to extend new move method without touching the original one. Please read the example below.
 ```C#
 class Program
 {
@@ -131,40 +131,9 @@ class Program
     }
 } 
 
-public class Monster
-{
-    private MoveBase _move;
-
-    public Monster(ref MoveBase monsterMove)
-    {
-        _move = monsterMove;
-    }
-
-    public void Go()
-    {
-        IMove_v1 m = _move as IMove_v1;
-        m.Foward();
-    }
-}
-
-public abstract class MoveBase
-{
-    protected GameObject _m_GameObject;
-
-    public MoveBase(GameObject gameObject)
-    {
-        _m_GameObject = gameObject;
-    }
-}
-
-public interface IMove_v1
-{
-    void Foward();
-}
-
 public class MonsterMove_v2 : MoveBase, IMove_v1
 {
-    public MonsterMove_v2(ref GameObject gameObject) : base(gameObject) {}
+    public MonsterMove_v2(GameObject gameObject) : base(gameObject) {}
 
     void IMove_v1.Foward()
     {
@@ -175,7 +144,7 @@ public class MonsterMove_v2 : MoveBase, IMove_v1
 
 public class MonsterMove_v1 : MoveBase, IMove_v1
 {
-    public MonsterMove_v1(ref GameObject gameObject) :base(gameObject) {}
+    public MonsterMove_v1(GameObject gameObject) :base(gameObject) {}
 
     public void Foward()
     {
@@ -187,7 +156,72 @@ public class MonsterMove_v1 : MoveBase, IMove_v1
 #### Now we have MonsterMove_v1 and MonsterMove_v2, we only need to decide which method should we use when we initialize Monster.
 
 ### 3. Liskov substitution principle
-### *
+#### Let's look at the following example.
+```c#
+class Program
+{
+    static void Main(string[] args)
+    {
+        GameObject GO1 = new GameObject();
+        GameObject GO2 = new GameObject();
+        MoveBase Mm1 = new MonsterMove_v1(GO1);
+        Monster Monster = new Monster(Mm1);
+        Dog Dog = new Dog(Mm1);
+
+        Monster.Go();
+        Dog.Go();
+    }
+}
+
+public class Monster
+{
+    private MoveBase _move;
+
+    public Monster(MoveBase monsterMove)
+    {
+        _move = monsterMove;
+    }
+    
+    public void Go()
+    {
+        MonsterMove_v1 m = _move as MonsterMove_v1;
+        if (null != m) {
+            m.Foward();
+            Console.WriteLine("I am Monster. I go with " + m.Show());
+        }
+    }
+}
+
+public class Dog
+{
+    private MoveBase _move;
+
+    public Dog(MoveBase dogMove)
+    {
+        _move = dogMove;
+    }
+    
+    public void Go()
+    {
+        MonsterMove_v1 m = _move as MonsterMove_v1;
+        if (null != m) {
+            m.Foward();
+            Console.WriteLine("I am Dog. I go with " + m.Show());
+        }
+    }
+}
+
+public class MonsterMove_v1 : MoveBase, IMove_v1
+{
+    ...
+    
+    public string Show()
+    {
+        return "Monster Walk.";
+    }
+}
+```
+#### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but more a precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
 ### 4. Interface segregation principle
 ### * 
 ### 5. Dependency inversion priciple
