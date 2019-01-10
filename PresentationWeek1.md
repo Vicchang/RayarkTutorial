@@ -221,17 +221,48 @@ public class MonsterMove_v1 : MoveBase, IMove_v1
     }
 }
 ```
-#### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, 
-#### there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never 
-#### walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is 
-#### "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but 
-#### a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
+#### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
 
 ### 4. Interface segregation principle
 ### * 
 ### 5. Dependency inversion priciple
 ### *
 ## When should we use inheritance, and when should we use composition?
+### A property is belong to the class and the property can be shared to many similar classes. In this case, the property would be extracted from the class and keep in the super class. At that time, inheritance is used. Taking below as an example.
+```c#
+public abstract class Animal 
+{
+    object left_front_foot, right_front_foot;
+    object left_back_foot, right_back_foot;
+}
+
+public class Cat : Animal
+{
+}
+
+public class Pig : Animal
+{
+}
+```
+### Cat should be born with 4 feet. That is its nature. The feet is not pluged by other and they are rarely changed. Hence, the inheritance is used to deal with this case. 
+### Compisition is more like a "Has a" relationship. That's say cats are born with 4 feets (Most of the time). Some of the cats has clothing but some don't. In this scenario, we should use compisition to handle clothing. The clothing is worn by cat but not native to cat. Here is the example.
+```C#
+public class Clothing
+{
+    public int color;
+}
+
+public class Cat : Animal
+{
+    private Clothing _m_Clothing;
+    public Cat(Clothing clothing)
+    {
+        _m_Clothing = clothing;
+    }
+}
+```
+### The idea of compisition and inheritance is that the object is native to the class, you should use inheritance while the object is not combined with the class, you should use compisition.
+
 ## What is dependency injection? What benefits does it brings?
 ## What does coupling means? What’s the value of Law of Demeter?
 ## What is side effects?
