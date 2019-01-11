@@ -300,7 +300,7 @@ public class Monster : GameObject
 ```
 ### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
 
-## What is dependency injection? What benefits does it brings?
+## <font color=#B22222>What is dependency injection? What benefits does it brings?</font>
 ### The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
 ```C#
 public class Monster
@@ -353,6 +353,45 @@ public static void CreateMonster
 ### We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
 
 ## What does coupling means? What’s the value of Law of Demeter?
+### As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
+### The idea of Law of Deter is that one class should know as litter as other class and do not use the other class's member variable to do the other work. Here is the example.
+```C#
+class Program
+{
+    static void Main(string[] args)
+    {
+        GameObject gameObject = new GameObject();
+        MonsterMove_v1 mMove_v1 = new MonsterMove_v1();
+        Monster monster = new Monster(mMove_v1, gameObject);
+
+        monster.Go();
+        monster.Move.Foward(gameObject);
+    }
+}
+
+public class Monster
+{
+    private IMove_v1 _m_move { get; }
+    private GameObject _m_gameObject;
+
+    public IMove_v1 Move
+    {
+        get { return _m_move; }
+    }
+    public Monster(IMove_v1 monsterMove, GameObject gameObject)
+    {
+        _m_move = monsterMove;
+        _m_gameObject = gameObject;
+    }
+
+    public void Go()
+    {
+        _m_move.Foward(_m_gameObject);
+    }
+}
+```
+### What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. That is the problem of high coupling.
+
 ## What is side effects?
 ## What is Test-Driven Development (TDD)?
 ## Why does unit test matter? How does unit test help for refactoring?
