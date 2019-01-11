@@ -277,7 +277,7 @@ public class Monster
 
     public void Go()
     {
-        _move.Foward();
+        _move.Foward(_m_GameObject);
     }
 }
 ```
@@ -296,12 +296,62 @@ public class Monster : GameObject
     {
         _move.Foward(this);
     }
-
 }
 ```
-### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a monster gameObject.
+### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
 
 ## What is dependency injection? What benefits does it brings?
+### The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
+```C#
+public class Monster
+{
+    private IMove_v1 _m_move;
+    private GameObject _m_gameObject;
+
+    public Monster(IMove_v1 monsterMove)
+    {
+        _m_move = monsterMove;
+        _m_gameObject = new GameObject();
+    }
+
+    public void Go()
+    {
+        _m_move.Foward(_m_gameObject);
+    }
+}
+```
+### This class can work perfectly, but it is lack of flexibility. As you can see, the class depends on a concreate class, GameObject. What happens if one day the gameObject becomes a different gameObject, for example, gameObject2D? You have to re-code all of the code to make it possible. Here is the modified code.
+```C#
+public class Monster
+{
+    private IMove_v1 _m_move;
+    private GameObject _m_gameObject;
+
+    public Monster(IMove_v1 monsterMove, GameObject gameObject)
+    {
+        _m_move = monsterMove;
+        _m_gameObject = gameObject;
+    }
+
+    public void Go()
+    {
+        _m_move.Foward(_m_gameObject);
+    }
+}
+
+public class GameObject2D : GameObject
+{
+}
+
+public static void CreateMonster
+{
+    GameObject2D gameObject2D = new GameObject2D();
+    MonsterMove_v1 mMonster_v1 = new MonsterMove_v1();
+    Monster monster = new (mMonster_v1, gameObject2D);
+}
+```
+### We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
+
 ## What does coupling means? What’s the value of Law of Demeter?
 ## What is side effects?
 ## What is Test-Driven Development (TDD)?
