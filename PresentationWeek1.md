@@ -441,4 +441,79 @@
   The most terrible thing for refactoring is that you have no idea that the program work as usual after refactoring. As mentioned above , unit test stands a great role in refactoring. It helps you quickly notice that if the program could work as usual or not.
   
 * ## By the arguments above, please analyze pros & cons of the singleton pattern.
+  Singleton pattern has its benefits while programing. It garuntees that the object would never be created twice. That is quite powerful. If a object is designed to create only once, there would be many undefined behaviour happen if you create it twice and those are really hard to debug. 
+  The other benefit is that you can access the object all over the program. That is you can use the object or its method any time you want. Isn't that cool? However, it is a benefit but it is also a disadvantage. A class using the singleton object means that the class is coupled to a 
+  concreate object. It is really harmful since it forbids unit test. If a class is depended on a concrete class, it is impossible to divide to testable unit and hence, hard to unit test. Take below as example. Assuming we have a singleton Cat class.
+  ```C#
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          Cat UniqueCat = Singleton<Cat>.getInstance();
+
+          ChangeName();
+      }
+
+      public static void ChangeName()
+      {
+          Cat SuperCat = Singleton<Cat>.getInstance();
+          SuperCat.ChangeName("Super Cat");
+
+          SuperCat.ShowName();
+      }
+  }  
+  
+  public class Singleton<T>
+  {
+      static T instance;
+      private static readonly object padlock = new object();
+
+      public static T getInstance()
+      {
+          if (null == instance)
+          {
+              lock (padlock)
+              {
+                  if (null == instance)
+                  {
+                      Type type = typeof(T);
+                      ConstructorInfo ctor = type.GetConstructor(
+                                                  BindingFlags.Instance | BindingFlags.NonPublic,
+                                                  null, CallingConventions.Any, new Type[0], null);
+                      instance = (T)ctor.Invoke(new object[] { });
+                  }
+              }
+          }
+
+          return instance;
+      }
+  }
+  ```
+  The ChageName function could not be tested since we directly access the singleton object in the function. This causes the function couples to concrete class. Fortunately, we can use denpendency injection to solve the problem. Check the code below.
+  ```C#
+  public static void ChangeName(Animal animal)
+  {
+      animal.ChangeName("Super Cat");
+
+      animal.ShowName();
+  }
+  
+  public class Cat : Animal
+  {
+      private string _name = "cat";
+      private Cat() { }
+
+      public override void ShowName()
+      {
+          Console.WriteLine("I am a " + _name);
+      }
+      public void ChangeName(string strInput)
+      {
+          _name = strInput;
+      }
+  }
+  ```
+  Now ChangeName function de-couples to the concrete class but couples to abstract class. If you want to test the unit, you can simply inject a stub and focus on the functionality of the function itself. 
+  The other problem of singleton is due to the "static" attribute. If a object is describe as static, it can be accessed withing the scope of the library or execute file. That says if a static variable is declare in one dll. It can not be used in the otehr dll.
+  For example, A process loads B dll and C dll. B and C share a same static library, which declares static variable D. Variable D in B and Variable D in C are different. Singleton has the same issue since it is implemented by static variable.
 * ## What is Design by Contracts? Why should we crash as early as possible?
