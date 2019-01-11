@@ -2,7 +2,7 @@
 ---
 * ## Please explain SOLID principles of object-oriented programming.
   ### 1. Single responsibility principle
-  #### Look at the code below. The Monster could go with specific way, which was X and Y plus one. 
+  Look at the code below. The Monster could go with specific way, which was X and Y plus one. 
       
   ```C#
   class Program
@@ -31,7 +31,7 @@
       }
   }
   ```
-  #### However, one day, someone requested that could the monster go with different way? The engineer quickly modified the code, which would be like below.    
+  However, one day, someone requested that could the monster go with different way? The engineer quickly modified the code, which would be like below.    
   ```C#
   class Program
   {
@@ -57,7 +57,7 @@
       }
   }    
   ```
-  #### Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle". The Monster class decided not only Monster should go but also how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, we seperate the task or the responsibility to other class. Single responsibility principle encourages that one class should only do one task. Below is a simple code to illustate the idea.
+  Unfotunately, someday, his boss requested the monster to go with one hundred new different ways. The engineer was stuck. The tragedy happend because it broke the "Single Responsibility Principle". The Monster class decided not only Monster should go but also how the monster go. The Monster class should leave how the monster go to other class to decide. In that case, we seperate the task or the responsibility to other class. Single responsibility principle encourages that one class should only do one task. Below is a simple code to illustate the idea.
   ```C#
   class Program
   {
@@ -114,7 +114,7 @@
   ```
   
   ### 2. Open/closed principles
-  #### The basic idea is that "a module or clsaa is open for extension and close for modification". As you can see from above, Monster class is now responsible for one task. It is now easy to extend new move method without touching the original one. Please read the example below.
+  The basic idea is that "a module or clsaa is open for extension and close for modification". As you can see from above, Monster class is now responsible for one task. It is now easy to extend new move method without touching the original one. Please read the example below.
   ```C#
   class Program
   {
@@ -153,10 +153,10 @@
       }
   }
   ```
-  #### Now we have MonsterMove_v1 and MonsterMove_v2, we only need to decide which method should we use when we initialize Monster.
+  Now we have MonsterMove_v1 and MonsterMove_v2, we only need to decide which method should we use when we initialize Monster.
   
   ### 3. Liskov substitution principle
-  #### Let's look at the following example.
+  Let's look at the following example.
   ```c#
   class Program
   {
@@ -221,14 +221,14 @@
       }
   }
   ```
-  #### The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
+  The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
   
   ### 4. Interface segregation principle
   ### * 
   ### 5. Dependency inversion priciple
   ### *
 * ## When should we use inheritance, and when should we use composition?
-  ### A property is belong to the class and the property can be shared to many similar classes. In this case, the property would be extracted from the class and keep in the super class. At that time, inheritance is used. Taking below as an example.
+  A property is belong to the class and the property can be shared to many similar classes. In this case, the property would be extracted from the class and keep in the super class. At that time, inheritance is used. Taking below as an example.
   ```c#
   public abstract class Animal 
   {
@@ -244,8 +244,8 @@
   {
   }
   ```
-  ### Cat should be born with 4 feet. That is its nature. The feet is not pluged by other and they are rarely changed. Hence, the inheritance is used to deal with this case. 
-  ### Compisition is more like a "Has a" relationship. That's say cats are born with 4 feets (Most of the time). Some of the cats has clothing but some don't. In this scenario, we should use compisition to handle clothing. The clothing is worn by cat but not native to cat. Here is the example.
+  Cat should be born with 4 feet. That is its nature. The feet is not pluged by other and they are rarely changed. Hence, the inheritance is used to deal with this case. 
+  Compisition is more like a "Has a" relationship. That's say cats are born with 4 feets (Most of the time). Some of the cats has clothing but some don't. In this scenario, we should use compisition to handle clothing. The clothing is worn by cat but not native to cat. Here is the example.
   ```C#
   public class Clothing
   {
@@ -261,8 +261,8 @@
       }
   }
   ```
-  ### The idea of compisition and inheritance is that the object is native to the class, you should use inheritance while the object is not combined with the class, you should use compisition.
-  ### Here is another example to illustrate the idea. We can have a monster class composite with gameObject or inheritant with gameObject. However, the meaning is different.
+  The idea of compisition and inheritance is that the object is native to the class, you should use inheritance while the object is not combined with the class, you should use compisition.
+  Here is another example to illustrate the idea. We can have a monster class composite with gameObject or inheritant with gameObject. However, the meaning is different.
   ```C#
   public class Monster
   {
@@ -281,7 +281,7 @@
       }
   }
   ```
-  ### This represent that a monster class has a gameObject or not. If it has gameObject, it can mimic like a gameObject. If it doesn't have gameObject, it can be a real monster or other else.
+  This represent that a monster class has a gameObject or not. If it has gameObject, it can mimic like a gameObject. If it doesn't have gameObject, it can be a real monster or other else.
   ```C#
   public class Monster : GameObject
   {
@@ -298,10 +298,10 @@
       }
   }
   ```
-  ### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
+  If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
   
 * ## What is dependency injection? What benefits does it brings?
-  ### The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
+  The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
   ```C#
   public class Monster
   {
@@ -320,7 +320,7 @@
       }
   }
   ```
-  ### This class can work perfectly, but it is lack of flexibility. As you can see, the class depends on a concreate class, GameObject. What happens if one day the gameObject becomes a different gameObject, for example, gameObject2D? You have to re-code all of the code to make it possible. Here is the modified code.
+  This class can work perfectly, but it is lack of flexibility. As you can see, the class depends on a concreate class, GameObject. What happens if one day the gameObject becomes a different gameObject, for example, gameObject2D? You have to re-code all of the code to make it possible. Here is the modified code.
   ```C#
   public class Monster
   {
@@ -350,11 +350,11 @@
       Monster monster = new (mMonster_v1, gameObject2D);
   }
   ```
-  ### We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
+  We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
   
 * ## What does coupling means? What’s the value of Law of Demeter?
-  ### As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
-  ### The idea of Law of Deter is that one class should know as litter as other class and do not use the other class's member variable to do the other work. Here is the example.
+  As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
+  The idea of Law of Deter is that one class should know as litter as other class and do not use the other class's member variable to do the other work. Here is the example.
   ```C#
   class Program
   {
@@ -390,7 +390,7 @@
       }
   }
   ```
-  ### What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. That is the problem of high coupling.
+  What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. That is the problem of high coupling.
   
 * ## What is side effects?
 * ## What is Test-Driven Development (TDD)?
