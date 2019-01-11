@@ -350,11 +350,12 @@
       Monster monster = new (mMonster_v1, gameObject2D);
   }
   ```
-  We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
+  We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. 
+  You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
   
 * ## What does coupling means? What’s the value of Law of Demeter?
   As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
-  The idea of Law of Deter is that one class should know as litter as other class and do not use the other class's member variable to do the other work. Here is the example.
+  The idea of Law of Deter is that one class should know as litte as other class and do not use the other class's member variable to do the other work. Here is the example.
   ```C#
   class Program
   {
@@ -390,10 +391,54 @@
       }
   }
   ```
-  What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. That is the problem of high coupling.
+  What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. 
+  For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. 
+  That is the case to casue high coupling and break Law of Demeter. 
   
 * ## What is side effects?
+  Look at the case below.
+  ```C#
+  public class Monster
+  {
+      private IMove_v1 _m_move { get; }
+      private GameObject _m_gameObject;
+  
+      public Monster(IMove_v1 monsterMove, GameObject gameObject)
+      {
+          _m_move = monsterMove;
+          _m_gameObject = gameObject;
+      }
+  
+      public void Walk()
+      {
+          _m_move.Foward(_m_gameObject);
+      }
+  }
+  ```
+  Now if we want our monster to fly. We may add following code to obey Law of Demeter.
+  ```C#
+  public class Monster
+  {
+      ...
+      public void Fly()
+      {
+          _m_move.Foward(_m_gameObject);
+      }
+  }
+  ```
+  What happen if we want the monster to crawl, dump, run? We need to add more and more wrapper in order to obey Law of Demeter. The class may look extremely complicated. One possible solution to this is that if we could name the function more abstract.
+  For example, we name the function "Move". In this case, even though the monster fly, walk, run or crawl, it would be not weird to call the "Move". However, it is hard to decide the correct name at the beginning and more abstract naming may break SRP.
 * ## What is Test-Driven Development (TDD)?
+  In order to show the idea of TDD. We need to know what is unit test first. A unit test is that set of tests to test the smallest testable part of an application. TDD is to develope according to the set of tests so as to create solid program.
+  TDD usually includes four steps. First, define a test set for the unit. Second, create the unit tests and make them fail. Third, implement the program logic. Forth, verify the implementation of the unit makes the tests succeed.
+  
 * ## Why does unit test matter? How does unit test help for refactoring?
+  The advantage of unit test can describe why does unit test matter. 
+  1. Unit test can solid your idea. If your implementation can pass the unit tests, you have better chance to be in the correct path. 
+  2. Unit test is like a safty net. While you extend your functionality, unit test is there to garuntee that your original function work as usual. This helps you focus on your new implementation.
+  3. Unit test can help you implement a more flexable system. A unit testable code means that it has less coupling, which is hgih flexibility.
+  
+  The most terrible thing for refactoring is that you have no idea that the program work as usual after refactoring. As mentioned above , unit test stands a great role in refactoring. It helps you quickly notice that if the program could work as usual or not.
+  
 * ## By the arguments above, please analyze pros & cons of the singleton pattern.
 * ## What is Design by Contracts? Why should we crash as early as possible?
