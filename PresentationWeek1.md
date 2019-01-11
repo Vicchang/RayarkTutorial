@@ -1,6 +1,6 @@
 # Week1
 ---
-## Please explain SOLID principles of object-oriented programming.
+* ## Please explain SOLID principles of object-oriented programming.
 ### 1. Single responsibility principle
 #### Look at the code below. The Monster could go with specific way, which was X and Y plus one. 
     
@@ -227,7 +227,7 @@ public class MonsterMove_v1 : MoveBase, IMove_v1
 ### * 
 ### 5. Dependency inversion priciple
 ### *
-## When should we use inheritance, and when should we use composition?
+* ## When should we use inheritance, and when should we use composition?
 ### A property is belong to the class and the property can be shared to many similar classes. In this case, the property would be extracted from the class and keep in the super class. At that time, inheritance is used. Taking below as an example.
 ```c#
 public abstract class Animal 
@@ -300,7 +300,7 @@ public class Monster : GameObject
 ```
 ### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
 
-## <font color=#B22222>What is dependency injection? What benefits does it brings?</font>
+* ## What is dependency injection? What benefits does it brings?
 ### The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
 ```C#
 public class Monster
@@ -352,7 +352,7 @@ public static void CreateMonster
 ```
 ### We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
 
-## What does coupling means? What’s the value of Law of Demeter?
+* ## What does coupling means? What’s the value of Law of Demeter?
 ### As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
 ### The idea of Law of Deter is that one class should know as litter as other class and do not use the other class's member variable to do the other work. Here is the example.
 ```C#
@@ -392,8 +392,8 @@ public class Monster
 ```
 ### What is the difference between "monster.Go()" and "monster.Move.Foward(gameObject)"? Actually, the functionality is all the same, but if you draw the UML diagram, you can find that the dependency is different. For "monster.Go()", main has a monster. For "monster.Move.F(gameObject)", main has a monster and use IMove_v1 class. What's the influence? As the denpendency becomes more and more, it would be more difficult to modify the class. That is the problem of high coupling.
 
-## What is side effects?
-## What is Test-Driven Development (TDD)?
-## Why does unit test matter? How does unit test help for refactoring?
-## By the arguments above, please analyze pros & cons of the singleton pattern.
-## What is Design by Contracts? Why should we crash as early as possible?
+*## What is side effects?
+*## What is Test-Driven Development (TDD)?
+*## Why does unit test matter? How does unit test help for refactoring?
+*## By the arguments above, please analyze pros & cons of the singleton pattern.
+*## What is Design by Contracts? Why should we crash as early as possible?
