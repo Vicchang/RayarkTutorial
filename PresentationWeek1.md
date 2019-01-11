@@ -262,6 +262,44 @@ public class Cat : Animal
 }
 ```
 ### The idea of compisition and inheritance is that the object is native to the class, you should use inheritance while the object is not combined with the class, you should use compisition.
+### Here is another example to illustrate the idea. We can have a monster class composite with gameObject or inheritant with gameObject. However, the meaning is different.
+```C#
+public class Monster
+{
+    private IMove_v1 _move;
+    private GameObject _m_GameObject;
+
+    public Monster(IMove_v1 monsterMove, GameObject gameObject = null)
+    {
+        _move = monsterMove;
+        _m_GameObject = gameObject;
+    }
+
+    public void Go()
+    {
+        _move.Foward();
+    }
+}
+```
+### This represent that a monster class has a gameObject or not. If it has gameObject, it can mimic like a gameObject. If it doesn't have gameObject, it can be a real monster or other else.
+```C#
+public class Monster : GameObject
+{
+    private IMove_v1 _move;
+
+    public Monster(IMove_v1 monster)
+    {
+        _move = monster;
+    }
+
+    public void Go()
+    {
+        _move.Foward(this);
+    }
+
+}
+```
+### If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a monster gameObject.
 
 ## What is dependency injection? What benefits does it brings?
 ## What does coupling means? What’s the value of Law of Demeter?
