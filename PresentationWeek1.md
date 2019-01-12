@@ -516,4 +516,45 @@
   Now ChangeName function de-couples to the concrete class but couples to abstract class. If you want to test the unit, you can simply inject a stub and focus on the functionality of the function itself. 
   The other problem of singleton is due to the "static" attribute. If a object is describe as static, it can be accessed withing the scope of the library or execute file. That says if a static variable is declare in one dll. It can not be used in the otehr dll.
   For example, A process loads B dll and C dll. B and C share a same static library, which declares static variable D. Variable D in B and Variable D in C are different. Singleton has the same issue since it is implemented by static variable.
+  
 * ## What is Design by Contracts? Why should we crash as early as possible?
+  While implementing a feature, the most important thing is to do things right. We'd like to garuntee that engineers can code the same as what they think. They can think the same as what the specs define.
+  Hence, there are lots of tool to help engineer to do things right. For example, we have detailed desgin document, code review, spec documnet, unit test, quality assurance and ... etc.
+  Design by contracts is another concept or framework to help engineers to code correctly. Whenever, engineer design implement a new class or function. There are preconditions, invariants and postconditions to
+  the function or class. The Dbc would like engineer to design those conditions before implementation. By doing so, you have more confidents on what you code. Basicly, it is not a new idea. 
+  Image the case that you are passing a string to a function, what you do is to write a if-else to check the input is null or not. Constract is somthing similar to that. It would write log on run time, 
+  throw exception on compile time or write as comments by different implementation of the framework. Take the below case from MSDN as example.
+  ```C#
+  public static string GetCustomerPassword(string customerID)
+  {
+      Contract.Requires(!string.IsNullOrEmpty(customerID), "Customer ID cannot be Null");
+      Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(customerID), "Exception!!");
+      Contract.Ensures(Contract.Result<string>() != null);
+      string password = "AAA@1234";
+      if (customerID != null)
+      {
+          return password;
+      }
+      else
+      {
+          return null;
+      }
+  }
+  ```
+  The contract checks the precondition that if the input string is null. If it is null, it would throw exception on compile time. This could help the engineer to find the logic defect quickly. Here is another example 
+  about invariants.
+  ```C#
+  [ContractInvariantMethod]
+  protected void ObjectInvariant()
+  {
+      Contract.Invariant(!string.IsNullOrEmpty(customerId));
+
+  }
+  ```
+  This garuntees that no matter before or after the function call, customerId is always not null. 
+  
+  Why should we crash as early as possible? I think as long as you can define when would a crash happen. The anwser would be trivial. A crash happens when the system is in an unrecoverable state. 
+  So if we can perfectly write down a system to finite state machine diagram. We can find that there is sink state. In that state, there is no way to transfer to other states. At that case, we crash since no matter what
+  you do, you are still in that state and no way to leave. Why is this useful? A crash doesn't say that "oh! The system throws exception. We should crahs it since something abnormal happens!" but that " The system now is 
+  in an unrecoverable state, please restart the system." There is another benefit for crashing earlier. It can leave more clues for trouble shootings. Since the system just make the transfer to the sink state,
+  it should have more clues comparing to the time after.
