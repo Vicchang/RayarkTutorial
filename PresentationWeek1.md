@@ -224,9 +224,111 @@
   The console will show "I am Monster. I go with Monster Walk." and "I am Dog. I go with Monster Walk.". To some people, there is nothing strange. A dog can walk like a monster is really cool. However, if your design is that a dog would never walk like a monster, there is something wrong on your design. The design breaks "Liskov Substituion Principle", which is "Subtypes must be substitutable for their base types". In this case, Dog should not accept MoveBase parameter type but a more precise parameter type, for example, DogMoveBase. And Monster, vise versa. The contradiction would be solved.
   
   ### 4. Interface segregation principle
-  ### * 
+  When class extends an interface, you should garuntee that there is no interface method not used by the class. A interface with unused method can highly represent that you don't seperate the interface coreectly.
+  You might break the single responsibility principle. 
+  ```C#
+  public class MonsterMove : MoveBase, IMove_v1
+  {
+      public MonsterMove(GameObject gameObject) : base(gameObject) {}
+  
+      void IMove_v1.Crawl()
+      {
+          _m_GameObject.X = _m_GameObject.X + 2;
+          _m_GameObject.Y = _m_GameObject.Y + 2;
+      }
+	  
+	  void IMove_v1.Fly()
+	  {
+	      throw new System.InvalidOperationException("Monster can not fly.");
+	  }
+	  ...
+  }
+  
+  public class BirdMove : MoveBase, IMove_v1
+  {
+      public BirdMove(GameObject gameObject) :base(gameObject) {}
+  
+      public void Fly()
+      {
+          _m_GameObject.X = _m_GameObject.X + 4;
+          _m_GameObject.Y = _m_GameObject.Y + 4;
+      }
+
+	  public void Crawl()
+	  {
+		   throw new System.InvalidOperationException("Bird can not crawl.");
+	  }	  
+	  ...
+  }
+  
+  public interface IMove_v1
+  {
+      void Walk();
+	  void Crawl();
+	  void Fly();
+  }  
+  ```
+  This would be awkard since you extend an interface, but you throw exception since the method is not used in the concrete class. This is an example of breaking "Interface Segregation Principle".
+  In this case, IMove_v1 interface has too many responsibility than it was designed.
+  ```C#
+  public interface IMove_v1
+  {
+      void Walk();
+  }  
+  
+  public interface IMove_CanFly : IMove_v1
+  {
+      void Fly();
+  }
+  
+  public interface IMove_CanCrawl : IMove_v1
+  {
+      void Crawl();
+  }
+  ```
+  As long as we seperate the interface to two sub interface, the awkard code would no longer exists and the interface IMove_v1 interface now has only responsibility.
+  
   ### 5. Dependency inversion priciple
-  ### *
+  High level modules should not depend on low level modules. This can greatly illustrate the principle. What kind of implmentation is that high level modules depends on low level module? Take the code below as example.
+  ```C#
+  public class Monster
+  {
+      private IMove_v1 _m_move;
+      private GameObject _m_gameObject;
+  
+      public Monster()
+      {
+          _m_move = new MonsterMove_v1();
+          _m_gameObject = new GameObject();
+      }
+  
+      public void Go()
+      {
+          _m_move.Foward(_m_gameObject);
+      }
+  }  
+  ```
+  Monster class depends on MonsterMove_v1 class and GameObeject class. The idea of the principle is that we want to invert the scenario. The basic method is that instead of high level module creates low level modules,
+  high level module holds a reference to low level modules and let other pass the low level modules to high level modules. 
+  ```C#
+  public class Monster
+  {
+      private IMove_v1 _m_move;
+      private GameObject _m_gameObject;
+  
+      public Monster(IMove_v1 monsterMove, GameObject gameObject)
+      {
+          _m_move = monsterMove;
+          _m_gameObject = gameObject;
+      }
+  
+      public void Go()
+      {
+          _m_move.Foward(_m_gameObject);
+      }
+  } 
+  ```
+  What are the benefits? High level modules de-couple to low level modules. That is really powerful. As long as a system is less coupling, it is more stable and flexibility.
 * ## When should we use inheritance, and when should we use composition?
   A property is belong to the class and the property can be shared to many similar classes. In this case, the property would be extracted from the class and keep in the super class. At that time, inheritance is used. Taking below as an example.
   ```c#
