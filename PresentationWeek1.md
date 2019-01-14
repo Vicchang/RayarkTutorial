@@ -456,7 +456,7 @@
   You want to stub some of the case since it doesn't need to be test during the unit test. With dependency on concrete class, you can't do it, but on base/abstract class, you can.
   
 * ## What does coupling means? What’s the value of Law of Demeter?
-  As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that assciation includes aggregation, compistion, inheritence, implementation and ...etc.
+  As long as a class has the association relationship with the other class, they are coupled. Coupling is used to descripe this situation. Note that association includes aggregation, compistion, inheritence, implementation and ...etc.
   The idea of Law of Deter is that one class should know as litte as other class and do not use the other class's member variable to do the other work. Here is the example.
   ```C#
   class Program
@@ -528,7 +528,7 @@
       }
   }
   ```
-  What happen if we want the monster to crawl, dump, run? We need to add more and more wrapper in order to obey Law of Demeter. The class may look extremely complicated. One possible solution to this is that if we could name the function more abstract.
+  What happen if we want the monster to crawl, jump and run? We need to add more and more wrapper in order to obey Law of Demeter. The class may look extremely complicated. One possible solution to this is that if we could name the function more abstract.
   For example, we name the function "Move". In this case, even though the monster fly, walk, run or crawl, it would be not weird to call the "Move". However, it is hard to decide the correct name at the beginning and more abstract naming may break SRP.
 * ## What is Test-Driven Development (TDD)?
   In order to show the idea of TDD. We need to know what is unit test first. A unit test is that set of tests to test the smallest testable part of an application. TDD is to develope according to the set of tests so as to create solid program.
@@ -540,12 +540,12 @@
   2. Unit test is like a safty net. While you extend your functionality, unit test is there to garuntee that your original function work as usual. This helps you focus on your new implementation.
   3. Unit test can help you implement a more flexable system. A unit testable code means that it has less coupling, which is hgih flexibility.
   
-  The most terrible thing for refactoring is that you have no idea that the program work as usual after refactoring. As mentioned above , unit test stands a great role in refactoring. It helps you quickly notice that if the program could work as usual or not.
+  The most terrible thing for refactoring is that you have no idea that the program works as usual after refactoring. As mentioned above, unit test stands a great role in refactoring. It helps you quickly notice that if the program could work as usual or not.
   
 * ## By the arguments above, please analyze pros & cons of the singleton pattern.
-  Singleton pattern has its benefits while programing. It garuntees that the object would never be created twice. That is quite powerful. If a object is designed to create only once, there would be many undefined behaviour happen if you create it twice and those are really hard to debug. 
+  Singleton pattern has its benefits while programing. It garuntees that the object would never be created twice. That is quite powerful. If a object is designed to create only once, there would be many undefined behaviours happen if you create it twice and those are really hard to debug. 
   The other benefit is that you can access the object all over the program. That is you can use the object or its method any time you want. Isn't that cool? However, it is a benefit but it is also a disadvantage. A class using the singleton object means that the class is coupled to a 
-  concreate object. It is really harmful since it forbids unit test. If a class is depended on a concrete class, it is impossible to divide to testable unit and hence, hard to unit test. Take below as example. Assuming we have a singleton Cat class.
+  concreate object. It is really harmful since it forbids unit test and makes the class inflexible. If a class depends on a concrete class, it is impossible to divide to testable unit and hence, hard to test and extend. Take below as example. Assuming we have a singleton Cat class.
   ```C#
   class Program
   {
