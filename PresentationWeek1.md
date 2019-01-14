@@ -498,38 +498,49 @@
   That is the case to casue high coupling and break Law of Demeter. 
   
 * ## What is side effects?
-  Look at the case below.
+  The definitino is 
+    A function or expression is said to hava a side effect if it modifies some state outside is local envirnment, that is to say has an observable interaction with the outside world besides returning a value.
+  To understand it, we could look at "pure function", which is the opposite of "side effect". A pure function is that
+    A function's return value is the same for the smae arguments and its evaluation has no side effects.
+  Below is the example of pure function.
   ```C#
-  public class Monster
+  class Program
   {
-      private IMove_v1 _m_move { get; }
-      private GameObject _m_gameObject;
-  
-      public Monster(IMove_v1 monsterMove, GameObject gameObject)
+      static void Main(string[] args)
       {
-          _m_move = monsterMove;
-          _m_gameObject = gameObject;
+          int a = 10;
+          int b = 20;
+          int sum = addOnenSum(a, b);
       }
   
-      public void Walk()
+      public static void addOnenSum(int a, int b) 
       {
-          _m_move.Foward(_m_gameObject);
+          a = a + 1;
+          b = b + 1;
+          return a+b;
       }
   }
   ```
-  Now if we want our monster to fly. We may add following code to obey Law of Demeter.
+  From above, after executing "addOnenSum", variable a and variable would stiil the same, that is "a" is still 10 and "b" is still 20. In this case, "addOnenSum" function is a pure function. Here is the example of side effect.
   ```C#
-  public class Monster
+  class Program
   {
-      ...
-      public void Fly()
+      static void Main(string[] args)
       {
-          _m_move.Foward(_m_gameObject);
+          int a = 10;
+          int b = 20;
+          int sum = addOnenSum(ref a, ref b);
       }
-  }
+  
+      public static void addOnenSum(ref int a, ref int b) 
+      {
+          a = a + 1;
+          b = b + 1;
+          return a+b;
+      }
+  }  
   ```
-  What happen if we want the monster to crawl, jump and run? We need to add more and more wrapper in order to obey Law of Demeter. The class may look extremely complicated. One possible solution to this is that if we could name the function more abstract.
-  For example, we name the function "Move". In this case, even though the monster fly, walk, run or crawl, it would be not weird to call the "Move". However, it is hard to decide the correct name at the beginning and more abstract naming may break SRP.
+  After executing "addOnenSum", variable a is 11 now and variable b is 21. the "addOnenSum" function has modified the state of a and b variable outside of its scope. That is side effect.
 * ## What is Test-Driven Development (TDD)?
   In order to show the idea of TDD. We need to know what is unit test first. A unit test is that set of tests to test the smallest testable part of an application. TDD is to develope according to the set of tests so as to create solid program.
   TDD usually includes four steps. First, define a test set for the unit. Second, create the unit tests and make them fail. Third, implement the program logic. Forth, verify the implementation of the unit makes the tests succeed.
