@@ -403,7 +403,7 @@
   If monster class is subclass of gameObject, it would be part of an gameObject forever. There is no way to be a real monster or else. Even if you do so, it is still a real monster gameObject.
   
 * ## What is dependency injection? What benefits does it brings?
-  The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or it is by other class. Let's look at the code below.
+  The dependency injection would occur in compisition, that is "has a" case. Take the above as example. Monster class has a gameObject. The key of DI is that who generate the gameObject. Is it Monster class or other class? Let's look at the code below, which monster class generate gameObject.
   ```C#
   public class Monster
   {
@@ -449,7 +449,7 @@
   {
       GameObject2D gameObject2D = new GameObject2D();
       MonsterMove_v1 mMonster_v1 = new MonsterMove_v1();
-      Monster monster = new (mMonster_v1, gameObject2D);
+      Monster monster = new Monster(mMonster_v1, gameObject2D);
   }
   ```
   We loose the coupling between GameObject and Monster. We can change the implmentation of gameobject at any time without re-coding. This is powerful. Imagine that you are writing unit test. 
