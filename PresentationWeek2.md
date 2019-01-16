@@ -8,7 +8,7 @@
   ### Value Type: 
   1. Usually stored in stack.
   2. A value type usually is not null. In C#, a value type could be defined as "Type?" to  nullable type. It is still value type since nullable types are instance of System.Nullable<T> struct.
-  3. In C#, struct, string, int and other primitive types are all value type.
+  3. In C#, struct, int and other primitive types are all value type.
   4. In C#, the copy constructor of value type is deep copy.
   5. In C#, a value type argument is always called by value, except using "ref" keyword. The "ref" keyword would force the argument to be passed by reference. Let's see the code below.
   ```C#
@@ -92,7 +92,7 @@
   ### Reference Type: 
   1. Always stored in heap.
   2. In C#, a reference type could be null. A reference type without initialization is assigned to null.
-  3. In C#, class is a reference type.
+  3. In C#, class and string are reference type.
   4. In C#, the copy constructor of a reference type is shadow copy.
   5. In C#, a reference type argument is always call by value, except using "ref" keyword. Any one holds the reference and modify the object would affect the other reference holder since arguments deep copy the paramter and the paramter only hold the address of the object, instead of the object instace. This cause the object instacne is not deep copied but shared. Take below as example.
   ```C#
@@ -153,6 +153,24 @@
   }       
   
 * ## What’s immutable type? And why should string be immutable?
+  Immuatable type can be explained by its name lol. A immutable object would never be changed, except initialization. What's the benefit? Some object is designed to be unchanged. With this attribute, it can help enginer not to modify the object accidently.
+  
+  The string in C# is immutable is due to that the string is a reference type. A reference type means that you could modify the value any time as long as you hold the reference. It is really risk if string is not immutable. Imagine the case below.
+  ```C#
+  static void Main(string[] args)
+  {
+      string str = "123";
+      ModifyStr(str);
+      Console.WriteLine("str is " + str); // str is 123
+  }
+
+  static void ModifyStr(string str)
+  {
+      str = "456";
+  }
+  ```
+  If string is not immutable type, the console should pring "str is 456". That is terrible. A class is just share the string to other class, but somehow, other class can modify the string and effect the sender class. Fortunately, it shows "str is 123" due to the string in fucntion refers to the new string, instead of, modifying the object it refering. 
+  
 * ## How coroutine works behind the scene? What is the benefit of coroutines over state machines?
 * ## What’s different between delegate and function pointer?
 * ## What is a closure and what is variable capture?
