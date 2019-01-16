@@ -120,11 +120,8 @@
   ```
   * Note: If you use VS debug to check the m_A and m_B, you would find that both of them point to the same address. Note that the address of m_A in stack is 0x00000075e078e0e0, while address of m_B is 0x00000075e078e0e8. Both of them point to 2088014197656(0x000001e627583398).
   
-  ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceDebugging.jpg)   
-  
-    Here is what it looks like in memory.
-  
-  ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceTypeDiagram.jpg)
+  ![Address Debug](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceDebugging.jpg)   
+  ![Memory Diagram](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceTypeDiagram.jpg)
   
   6. The "ref" keyword to reference type is to pass the reference of the reference. If you pass a reference type to a function and new the object, it would not affect the original one. Since paramters are passed by value, it is a differenct object which hold the same reference to the reference object. However, if you pass the reference of reference type to the function by "ref", you can control the real reference and change the object it refer to. Take below as example.
   ```C#
