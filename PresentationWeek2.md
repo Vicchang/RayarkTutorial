@@ -89,7 +89,7 @@
   }    
   ```
   7. In C#, A value type in stack will be deleted immediately as long as the stack pop-up, while a value type in heap would be deleted by "Garbage Collection".
-  * Reference Type: 
+  ### Reference Type: 
   1. Always stored in heap.
   2. In C#, a reference type could be null. A reference type without initialization is assigned to null.
   3. In C#, class is a reference type.
@@ -118,10 +118,11 @@
       }
   }
   ```
-        If you use VS debug to check the m_A and m_B, you would find that both of them point to the same address. Note that the address of m_A in stack is 0x00000075e078e0e0, while address of m_B is 0x00000075e078e0e8. Both of them point to 2088014197656(0x000001e627583398).
+  * Note: If you use VS debug to check the m_A and m_B, you would find that both of them point to the same address. Note that the address of m_A in stack is 0x00000075e078e0e0, while address of m_B is 0x00000075e078e0e8. Both of them point to 2088014197656(0x000001e627583398).
+  
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceDebugging.jpg)   
   
-        Here is what it looks like in memory.
+    Here is what it looks like in memory.
   
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceTypeDiagram.jpg)
   
