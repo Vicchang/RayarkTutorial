@@ -5,13 +5,14 @@
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/TypeCmpDiagram.jpg)
   
   However, that is not absolutely right. A value type could be in heap, too. Below is the detail description about value type and reference type.
-  * Value Type: 
+  ### Value Type: 
   1. Usually stored in stack.
   2. A value type usually is not null. In C#, a value type could be defined as "Type?" to  nullable type. It is still value type since nullable types are instance of System.Nullable<T> struct.
   3. In C#, struct, string, int and other primitive types are all value type.
   4. In C#, the copy constructor of value type is deep copy.
   5. In C#, a value type argument is always called by value, except using "ref" keyword. The "ref" keyword would force the argument to be passed by reference. Let's see the code below.
   ```C#
+  // Example without "ref" keyword
   static void Main(string[] args)
   {
       int a = 10;
@@ -24,8 +25,8 @@
       a += 1;
   }
   ```
-  Example with "ref" keyword.
   ```C#
+  // Example with "ref" keyword.
   static void Main(string[] args)
   {
       int a = 10;
@@ -117,10 +118,11 @@
       }
   }
   ```
-  If you use VS debug to check the m_A and m_B, you would find that both of them point to the same address. Note that the address of m_A in stack is 0x00000075e078e0e0, while address of m_B is 0x00000075e078e0e8. Both of them point to 2088014197656(0x000001e627583398).
+        If you use VS debug to check the m_A and m_B, you would find that both of them point to the same address. Note that the address of m_A in stack is 0x00000075e078e0e0, while address of m_B is 0x00000075e078e0e8. Both of them point to 2088014197656(0x000001e627583398).
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceDebugging.jpg)   
   
-  Here is what it looks like in memory.
+        Here is what it looks like in memory.
+  
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/ReferenceTypeDiagram.jpg)
   
   6. The "ref" keyword to reference type is to pass the reference of the reference. If you pass a reference type to a function and new the object, it would not affect the original one. Since paramters are passed by value, it is a differenct object which hold the same reference to the reference object. However, if you pass the reference of reference type to the function by "ref", you can control the real reference and change the object it refer to. Take below as example.
