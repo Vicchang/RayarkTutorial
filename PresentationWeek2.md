@@ -169,9 +169,24 @@
       str = "456";
   }
   ```
-  If string is not immutable type, the console should pring "str is 456". That is terrible. A class is just share the string to other class, but somehow, other class can modify the string and effect the sender class. Fortunately, it shows "str is 123" due to the string in fucntion refers to the new string, instead of, modifying the object it refering. 
+  If string is not immutable type, the console should print "str is 456". That is terrible. A class is just share the string to other class, but somehow, other class can modify the string and effect the sender class. Fortunately, it shows "str is 123" due to the string in fucntion refers to the new string, instead of, modifying the object it refering. 
   
 * ## How coroutine works behind the scene? What is the benefit of coroutines over state machines?
+  Let's talk about what is coroutine first. 
+  > Coroutines generalize subroutines for non-preemptive multitasking, by allowing multiple entry points for suspending and resuming execution at certain locations
+  Basicly, the mission of coroutine is to construct multitasking ecosystem. Isn't that the familar idea with multi-thread? It's true that the goal is similar; however, there are lots of difference between them.
+  1. Coroutine is non-preeptive multitasking, while multi-thread is preeptive multitasking. Briefly saying, Non-preeptive multitasking is to manully schedule the tasks, and preeptive multitasking is to schedule by the system.
+  2. With system involving, there is no context switch in coroutine. Hence, there is less performance impact on coroutine.
+  3. There is no deadlock in coroutine due to the schedule of tasks is defined maunully.
+  4. Coroutine is not parallelly running but concurrently. Multi-threads could run parallelly or concurrently depends on system.
+  5. Coroutine is complished by only one thread.
+  
+  How could coroutine be multitasking but with only one thread? Coroutine allows multiple entry points for suspending and sesuming execution. Briefly saying, you could execute a function. During that time, you can pause the execution of that function and run other task.
+  After couple of time, you could go back to the function and continue the rest of it. Isn't that sounds like multi-tasking? When you have done the first task, the other has been done, too. You could see the flow diagram below to get a clear view.
+  
+  ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/CoroutineThreads.jpg)
+  
+  
 * ## What’s different between delegate and function pointer?
 * ## What is a closure and what is variable capture?
 * ## What is RAII? Why should we prefer RAII over plain function calls?
