@@ -232,7 +232,7 @@
 
   }  
   ```
-  This code use "canMove" and "canRotate" to controll the flow, which really makes the logic complicated. Imgae that if there are more states, the code would be unreadable.
+  This code uses "canMove" and "canRotate" to controll the flow, which really makes the logic complicated. Imgae that if there are more states, the code would be unreadable.
   ```C#
   // with coroutine
   private IEnumerator CmdDetectionAndMove()
@@ -274,5 +274,81 @@
   
   This is the power of coroutine. It helps to code exactly like what the state diagram and have a clear view about state transition.
 * ## What’s different between delegate and function pointer?
+  1. There is no signature on function pointer while delegate guaruntee to have signature. Here is the example.
+  ```C++
+  typedef void (*Callback)(void*,int,int);
+  
+  class DelegatePerf {
+  public:
+      bool Register(void* holder, Callback cb);
+      void run();
+      
+  private:
+      map<string, data> m_holders;
+  };
+  
+  class PerfCounter {
+  public:
+      static void Callback(void* holder, int x, int y) // must be static in C++
+      {
+          PerfCounter* temp = (PerfCounter*)holder;
+          temp->perfCount(x, y);
+      }
+      
+      ...
+      // Register in contructor
+  private:
+      int perfCount(int x, int y) {
+          cout << "123" << endl;
+      };
+      
+      DelegatePerf* _m_df;
+  };
+  
+  bool DelegatePerf::Register(void* holder, Callback cb) {
+      data d = {holder, cb};
+      m_holders.insert(pair<string, data>("PerfCounter", d));
+  }
+  
+  void DelegatePerf::run() {
+      for (auto obj : m_holders)
+      {
+          obj.second.cb(obj.second.holder, 1, 2);
+      }    
+  }
+ 
+  int main()
+  {
+      DelegatePerf* df = new DelegatePerf();
+      PerfCounter* pf = new PerfCounter(df);
+  
+      df->run();
+  
+      return 0;
+  }  
+  ```
+  ```C#
+  class Program
+  {
+      public delegate int DelegatePerfCounter(int x, int y);
+
+      static void Main(string[] args)
+      {
+          PerfCounterClass pfc = new PerfCounterClass();
+          DelegatePerfCounter Perf = new DelegatePerfCounter(pfc.PerfCounter); // can pass obj function to delegate
+
+          Perf(3, 10);
+      }
+  }
+  
+  class PerfCounterClass
+  {
+      public int PerfCounter(int x, int y) // no need to be static
+      {
+          Console.WriteLine("456");
+          return x + y;
+      }
+  }
+  ```
 * ## What is a closure and what is variable capture?
 * ## What is RAII? Why should we prefer RAII over plain function calls?
