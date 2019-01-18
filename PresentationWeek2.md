@@ -174,6 +174,7 @@
 * ## How coroutine works behind the scene? What is the benefit of coroutines over state machines?
   Let's talk about what is coroutine first. 
   > Coroutines generalize subroutines for non-preemptive multitasking, by allowing multiple entry points for suspending and resuming execution at certain locations
+  
   Basicly, the mission of coroutine is to construct multitasking ecosystem. Isn't that the familar idea with multi-thread? It's true that the goal is similar; however, there are lots of difference between them.
   1. Coroutine is non-preeptive multitasking, while multi-thread is preeptive multitasking. Briefly saying, Non-preeptive multitasking is to manully schedule the tasks, and preeptive multitasking is to schedule by the system.
   2. With system involving, there is no context switch in coroutine. Hence, there is less performance impact on coroutine.
@@ -186,7 +187,91 @@
   
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/CoroutineThreads.jpg)
   
+  Let's talk about how unity implment coroutine and what happen when you call startcoroutine function in unity.
+  1. Unity should (not open source) implment coroutine by iEnumerator in C#. That is the reason why every coroutine should be declared as iEnumerator.
+  2. To my understanding, iEnumerator is to enumerate code blocks. The idea is that a coroutine could be seprated by "yield" keyword. Calling "MoveNext" in an iEnumerator object would trigger the code block and iterate the pointer to next pointer.
+  3. If there are subcoroutine, it could be implmented by stack. That is as long as the subroutine code blocks are all disposed, the coroutine code block in stack then get called.
+  4. The time of resuming coroutine in unity is after "update". Since "update" is called every frame, coroutine is called every frame, too.
   
+  What is the benefit of coroutines over state machines? First of all, I'd like to claim it is benefit to hardware-constrained state machine. It really makes the state transition clean. 
+  * Imaging how could you implment a state machine with only one thread.
+  There must be lots of if-else statement since a state transition is always combined with many contidions. To fulfill the conditions, there must be lots of sub task to do. Without coroutine, you have to set lots of flags, to know with state is it now and switch to the coresponding task. Take the example below.
+  ```C# 
+  // without coroutine
+  void HandleMove()
+  {
+      if (canMove)
+      {
+          // Detection keyboard
+      }
+
+      // Rotatioin
+      if (canRotate)
+      {
+          Vector3 rot = new Vector3(_m_nextTile.transform.position.x - this.transform.position.x, 0, _m_nextTile.transform.position.z - this.transform.position.z);
+          Quaternion newRotation = Quaternion.LookRotation(rot, Vector3.up);
+          rb.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, 360f);
+      }
+
+      // Move
+      if (Vector3.Distance(_toMovedistance, Vector3.zero) <= 0.002)
+      {
+          _m_character.m_curTile = _m_nextTile;
+          _m_nextTile = null;
+          canMove = true;
+          canRotate = true;
+          IsMoving = false;
+      }
+      else
+      {
+          rb.MovePosition(this.transform.position + _moveDistance * walkSpeed * Time.deltaTime);
+          _toMovedistance -= _moveDistance * walkSpeed * Time.deltaTime;
+          canMove = false;
+          IsMoving = true;
+      }
+
+  }  
+  This code use "canMove" and "canRotate" to controll the flow, which really makes the logic complicated. Imgae that if there are more states, the code would be unreadable.
+  ```C#
+  // with coroutine
+  private IEnumerator CmdDetectionAndMove()
+  {
+      while (true)
+      {
+          // detect keyboard
+          if (_nextTile)
+          {
+              yield return StartCoroutine(Move());
+          }
+
+          yield return null;
+      }
+  }
+  private IEnumerator Move()
+  {
+      IsMoving = true;
+
+      // Rotate
+      Vector3 rot = new Vector3(_nextTile.transform.position.x - this.transform.position.x, 0, _nextTile.transform.position.z - this.transform.position.z);
+      Quaternion newRotation = Quaternion.LookRotation(rot, Vector3.up);
+      _rb.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, 360f);
+
+      // Move
+      _nextPos = new Vector3(_nextTile.transform.position.x, this.transform.position.y, _nextTile.transform.position.z);
+      while (Vector3.Distance(this.transform.position, _nextPos) > 0.2)
+      {
+          _rb.transform.position = Vector3.Lerp(this.transform.position, _nextPos, _speed * Time.deltaTime);
+          yield return null;
+      }
+      _character.m_curTile = _nextTile;
+      _nextPos = Vector3.zero;
+      _nextTile = null;
+      IsMoving = false;
+  }  
+  ```
+  The logic is more clear. First, detect the keyboard. If detected, start the subcoroutine "move". The "move" will be done as long as it reachs the destination.
+  
+  This is the power of coroutine. It helps to code exactly like what the state diagram and have a clear view about state transition.
 * ## What’s different between delegate and function pointer?
 * ## What is a closure and what is variable capture?
 * ## What is RAII? Why should we prefer RAII over plain function calls?
