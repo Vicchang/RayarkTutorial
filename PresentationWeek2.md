@@ -231,6 +231,7 @@
       }
 
   }  
+  ```
   This code use "canMove" and "canRotate" to controll the flow, which really makes the logic complicated. Imgae that if there are more states, the code would be unreadable.
   ```C#
   // with coroutine
