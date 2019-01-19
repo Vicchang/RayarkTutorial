@@ -405,11 +405,12 @@
   }  
   ```
   If a language doesn't support closure, the "counter" would be detroyed as long as leaving the function since it's a local variable. However, in C#, delegate is a way to declare closure. The "counter" is used by delegate. In order to 
-  keep the value consistency, the life cycle of couter is extended to as long as "show" and "increment". In other words, a clousre is like an object which contains functions and variables. If the object is not destroyed, the 
+  keep the value consistency, the life cycle of couter is extended to the same as "show" and "increment". In other words, a clousre is like an object which contains functions and variables. If the object is not destroyed, the 
   variables and the functions would keep alive.
   
   * Variable Capture
   > A variable capture is a mechanism that when a closure happens, the local variable would be captured into the closure.
+  
   Due to closure, the local variable is captured to closure and the life cycle of it is extended. In this case, the local variable should be used carfully. Here is example of misusing.
   ```C#
   void Foo()
@@ -446,7 +447,7 @@
   2. Exception safty: When exception occurs, the call stack would be broken. It has great chance to cause resource leak without the implmentation of RAII. A well-designed RAII could prevent this case.
   3. Immediation of resource releasing: GC will release resource automatically in the future, but RALL can guaruntee the resource would be released as long as the object is destroyed. In severe environment, it is better to release memory as quickly as possible.
 
-  It is prefered to RALL over plain function calls is due to the third reason, Immediation of resource release. In C#, GC needs to consume some resource. As long as GC not taking place, the performance of the system would be better. Here
+  It is prefered to RALL over plain function calls is due to the third reason, immediation of resource release. In C#, GC needs to consume some resource. As long as GC not taking place, the performance of the system would be better. Here
   is an exmple to illustrate plain function calls with RAII and without RAII.
   ```C#
   static void Main(string[] args)
