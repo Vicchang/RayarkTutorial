@@ -382,6 +382,7 @@
   }  
   ```
 * ## What is a closure and what is variable capture?
+  * Closure
   > A closure is a persistent local variable scope.
   Usually, a local varialbe is destroyed when leaving the scope. If a local variable is defined in closure, it's lifecycle would be extend as the same as the closure. Here is an example in C#.
   ```C#
@@ -403,12 +404,13 @@
       return System.Tuple.Create(show, increment);
   }  
   ```
-  If a language doesn't support closure, the "counter" would be detroyed as long as leaving the function since it's a local variable. However, in C#, delegate is a way to declare closure. The "counter" is used by delegate.In order to 
-  keep the value consistency, the lifecycle of couter is extended to as long as "show" and "increment". In other words, a clousre is like an object which contains functions and variables. As long as the object is not destroyed, the 
+  If a language doesn't support closure, the "counter" would be detroyed as long as leaving the function since it's a local variable. However, in C#, delegate is a way to declare closure. The "counter" is used by delegate. In order to 
+  keep the value consistency, the life cycle of couter is extended to as long as "show" and "increment". In other words, a clousre is like an object which contains functions and variables. If the object is not destroyed, the 
   variables and the functions would keep alive.
   
+  * Variable Capture
   > A variable capture is a mechanism that when a closure happens, the local variable would be captured into the closure.
-  Due to closure, a local variable's lifecycle would extend and this is what we called variable capture. the local variable is captured to the clousre. In this case, the local variable should be used carfully. Here is example of misusing.
+  Due to closure, the local variable is captured to closure and the life cycle of it is extended. In this case, the local variable should be used carfully. Here is example of misusing.
   ```C#
   void Foo()
   {
