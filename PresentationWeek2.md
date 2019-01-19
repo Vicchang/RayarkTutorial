@@ -274,7 +274,8 @@
   
   This is the power of coroutine. It helps to code exactly like what the state diagram and have a clear view about state transition.
 * ## What’s different between delegate and function pointer?
-  1. There is no signature on function pointer while delegate guaruntee to have signature. Here is the example.
+  1. Delegate is a reference type while function pointer is a pointer type.
+  2. There is no signature on function pointer while delegate guaruntee to have signature. Here is the example.
   ```C++
   typedef void (*Callback)(void*,int,int);
   
@@ -350,5 +351,115 @@
       }
   }
   ```
+  3. In C#, a delegate could contain multiple methods, while in C++, a function pointer could could not point to multiple methods. Here is the example about delegate.
+  ```C#
+  class Program
+  {
+      public delegate int DelegatePerfCounter(int x, int y);
+
+      public static int PerfCounter(int x, int y)
+      {
+          Console.WriteLine("123");
+          return x + y;
+      }
+
+      static void Main(string[] args)
+      {
+          PerfCounterClass pfc = new PerfCounterClass();
+          DelegatePerfCounter Perf = new DelegatePerfCounter(pfc.PerfCounter);  // add first function
+          Perf += PerfCounter;                                                  // add second function
+          Perf(3, 10);
+      }
+  }
+
+  class PerfCounterClass
+  {
+      public int PerfCounter(int x, int y)
+      {
+          Console.WriteLine("456");
+          return x + y;
+      }
+  }  
+  ```
 * ## What is a closure and what is variable capture?
+  > A closure is a persistent local variable scope.
+  Usually, a local varialbe is destroyed when leaving the scope. If a local variable is defined in closure, it's lifecycle would be extend as the same as the closure. Here is an example in C#.
+  ```C#
+  static void Main(string[] args)
+  {
+      var tuple = CreateShowAndIncrementActions();
+      var show = tuple.Item1;
+      var increment = tuple.Item2;
+      show(); // Prints 0
+      show(); // Still prints 0
+      increment();
+      show(); // Now prints 1
+  }
+  static System.Tuple<Action, Action> CreateShowAndIncrementActions()
+  {
+      int counter = 0; // lifecycle is expanded due to closure
+      Action show = () => { Console.WriteLine(counter); };
+      Action increment = () => { counter++; };
+      return System.Tuple.Create(show, increment);
+  }  
+  ```
+  If a language doesn't support closure, the "counter" would be detroyed as long as leaving the function since it's a local variable. However, in C#, delegate is a way to declare closure. The "counter" is used by delegate.In order to 
+  keep the value consistency, the lifecycle of couter is extended to as long as "show" and "increment". In other words, a clousre is like an object which contains functions and variables. As long as the object is not destroyed, the 
+  variables and the functions would keep alive.
+  
+  > A variable capture is a mechanism that when a closure happens, the local variable would be captured into the closure.
+  Due to closure, a local variable's lifecycle would extend and this is what we called variable capture. the local variable is captured to the clousre. In this case, the local variable should be used carfully. Here is example of misusing.
+  ```C#
+  void Foo()
+  {
+      List<Action> actions = new List<Action>();
+      for (int i = 0; i < 10; ++i) // i is a local variable and is captured by closure
+      {
+          actions.Add(() => Console.WriteLine(i));
+      }
+      
+      foreach(Action a in actions) a(); // print 10 for ten times.
+  }
+  ```
+  If there is no closure happened, the output should be 0 to 9. However, the local variable i is captured. The lifecycle of i is extend and this cause that i++ always modify the same i, instead of different i. Here is how we can do it write 
+  with closure.
+  ```C#
+  void Foo()
+  {
+      List<Action> actions = new List<Action>();
+      for (int i = 0; i < 10; ++i) // it is a local varaible but is not captured
+      {
+          int captured_i = i; // captured_i is captured by closure, the lifecycle of it is within each loop
+          actions.add(() => Console.WriteLine(captured_i));
+      }
+      
+      foreach(Action a in actions) a(); // print 0 to 9.
+  }
+  ```  
+  The "captured_i" is captured in each loop. However, its lifecycle is the same as each loop. That means the capture_i in the first loop is different from the second loop and so on.
 * ## What is RAII? Why should we prefer RAII over plain function calls?
+  RALL is the abbreviation of resource acquisition is initialization. The local variable should be tied to obeject lifetime. On the other hand, if a local variable is created within a scope, it should be destructed as long as leaving the scope. In that case, there are no resource leaks.
+  If a implmentation follows RAII, it benefits from following perspective.
+  1. Clean concept: local variable now is combined to the life cycle of the object. You don't need to worry about the destruction of the local variable because it detroies itself automatically as the object is destroyed.
+  2. Exception safty: When exception occurs, the call stack would be broken. It has great chance to cause resource leak without the implmentation of RAII. A well-designed RAII could prevent this case.
+  3. Immediation of resource releasing: GC will release resource automatically in the future, but RALL can guaruntee the resource would be released as long as the object is destroyed. In severe environment, it is better to release memory as quickly as possible.
+
+  It is prefered to RALL over plain function calls is due to the third reason, Immediation of resource release. In C#, GC needs to consume some resource. As long as GC not taking place, the performance of the system would be better. Here
+  is an exmple to illustrate plain function calls with RAII and without RAII.
+  ```C#
+  static void Main(string[] args)
+  {
+      int x = 1, y = 2;
+      Add_RAII(x,y); // no GC involved
+      Add(x, y); // GC involved
+  }
+  static int Add_RAII(int x, int y) // x and y are destroyed while leaving the function
+  {
+      return x + y;
+  }
+  static int Add(int x, int y) // Op is not destroyed but stay there waiting for GC
+  {
+      Opt op = new Opt();
+      return op.Add(x, y);
+  }    
+  ```
