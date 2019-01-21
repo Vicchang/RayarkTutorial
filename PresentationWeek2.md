@@ -8,8 +8,8 @@
   ### Value Type: 
   1. Usually stored in stack.
   2. A value type usually is not null. In C#, a value type could be defined as "Type?" to  nullable type. It is still value type since nullable types are instance of System.Nullable<T> struct.
-  3. In C#, struct, int and other primitive types are all value type.
-  4. In C#, the copy constructor of value type is deep copy.
+  3. In C#, struct, int and other primitive types, except string are all value type.
+  4. In C#, the copy constructor of value type is deep copy (It is due to immutable type, instead of value type).
   5. In C#, a value type argument is always called by value, except using "ref" keyword. The "ref" keyword would force the argument to be passed by reference. Let's see the code below.
   ```C#
   // Example without "ref" keyword
@@ -93,7 +93,7 @@
   1. Always stored in heap.
   2. In C#, a reference type could be null. A reference type without initialization is assigned to null.
   3. In C#, class and string are reference type.
-  4. In C#, the copy constructor of a reference type is shadow copy.
+  4. In C#, the copy constructor of a reference type, except string, is shadow copy.
   5. In C#, a reference type argument is always call by value, except using "ref" keyword. Any one holds the reference and modify the object would affect the other reference holder since arguments deep copy the paramter and the paramter only hold the address of the object, instead of the object instace. This cause the object instacne is not deep copied but shared. Take below as example.
   ```C#
   class Program
@@ -153,9 +153,9 @@
   }       
   
 * ## What’s immutable type? And why should string be immutable?
-  Immuatable type can be explained by its name lol. A immutable object would never be changed, except initialization. What's the benefit? Some object is designed to be unchanged. With this attribute, it can help enginer not to modify the object accidently.
+  Immuatable type can be explained by its name lol. A immutable object would never be changed, except initialization. What's the benefit? Some object is designed to be unchanged. With this attribute, it can help engineer not to modify the object accidently.
   
-  The string in C# is immutable is due to that the string is a reference type. A reference type means that you could modify the value any time as long as you hold the reference. It is really risk if string is not immutable. Imagine the case below.
+  The string in C# is immutable is due to that the string is a reference type. A reference type means that you could modify the value any time as long as you hold the reference. It is really risky if string is not immutable. Imagine the case below.
   ```C#
   static void Main(string[] args)
   {
@@ -177,25 +177,27 @@
   
   Basicly, the mission of coroutine is to construct multitasking ecosystem. Isn't that the familar idea with multi-thread? It's true that the goal is similar; however, there are lots of difference between them.
   1. Coroutine is non-preeptive multitasking, while multi-thread is preeptive multitasking. Briefly saying, Non-preeptive multitasking is to manully schedule the tasks, and preeptive multitasking is to schedule by the system.
-  2. With system involving, there is no context switch in coroutine. Hence, there is less performance impact on coroutine.
+  2. Without system involving, there is no context switch in coroutine. Hence, there is less performance impact on coroutine.
   3. There is no deadlock in coroutine due to the schedule of tasks is defined maunully.
   4. Coroutine is not parallelly running but concurrently. Multi-threads could run parallelly or concurrently depends on system.
   5. Coroutine is complished by only one thread.
   
-  How could coroutine be multitasking but with only one thread? Coroutine allows multiple entry points for suspending and sesuming execution. Briefly saying, you could execute a function. During that time, you can pause the execution of that function and run other task.
+  How could coroutine be multitasking but with only one thread? Coroutine allows multiple entry points for suspending and resuming execution. Briefly saying, you could execute a function. During that time, you can pause the execution of that function and run other task.
   After couple of time, you could go back to the function and continue the rest of it. Isn't that sounds like multi-tasking? When you have done the first task, the other has been done, too. You could see the flow diagram below to get a clear view.
   
   ![Value Type vs Reference Type](https://github.com/Vicchang/RayarkTutorial/blob/master/CoroutineThreads.jpg)
   
-  Let's talk about how unity implment coroutine and what happen when you call startcoroutine function in unity.
+  Let's talk about how unity implment coroutine and what happens when you call startcoroutine function in unity.
   1. Unity should (not open source) implment coroutine by iEnumerator in C#. That is the reason why every coroutine should be declared as iEnumerator.
   2. To my understanding, iEnumerator is to enumerate code blocks. The idea is that a coroutine could be seprated by "yield" keyword. Calling "MoveNext" in an iEnumerator object would trigger the code block and iterate the pointer to next pointer.
   3. If there are subcoroutine, it could be implmented by stack. That is as long as the subroutine code blocks are all disposed, the coroutine code block in stack then get called.
   4. The time of resuming coroutine in unity is after "update". Since "update" is called every frame, coroutine is called every frame, too.
   
-  What is the benefit of coroutines over state machines? First of all, I'd like to claim it is benefit to hardware-constrained state machine. It really makes the state transition clean. 
+  This is [data flow](https://docs.unity3d.com/Manual/ExecutionOrder.html) diagram from unity.
+  
+  What is the benefit of coroutines over state machines? First, I'd like to claim it is benefit to hardware-constrained state machine since it has less performance impact. Second, It really makes the state transition clean. 
   * Imaging how could you implment a state machine with only one thread.
-  There must be lots of if-else statement since a state transition is always combined with many contidions. To fulfill the conditions, there must be lots of sub task to do. Without coroutine, you have to set lots of flags, to know with state is it now and switch to the coresponding task. Take the example below.
+  There must be lots of if-else statement since a state transition is always combined with many contidions. To fulfill the conditions, there must be lots of subtasks to do. Without coroutine, you have to set lots of flags in order to know which state it is now and then switch to the corresponding task. Take the example below.
   ```C# 
   // without coroutine
   void HandleMove()
@@ -411,7 +413,7 @@
   * Variable Capture
   > A variable capture is a mechanism that when a closure happens, the local variable would be captured into the closure.
   
-  Due to closure, the local variable is captured to closure and the life cycle of it is extended. In this case, the local variable should be used carfully. Here is example of misusing.
+  The local variable is captured to closure and the life cycle of it is extended. In this case, the local variable should be used carfully. Here is example of misusing.
   ```C#
   void Foo()
   {
@@ -441,9 +443,9 @@
   ```  
   The "captured_i" is captured in each loop. However, its lifecycle is the same as each loop. That means the capture_i in the first loop is different from the second loop and so on.
 * ## What is RAII? Why should we prefer RAII over plain function calls?
-  RALL is the abbreviation of resource acquisition is initialization. The local variable should be tied to obeject lifetime. On the other hand, if a local variable is created within a scope, it should be destructed as long as leaving the scope. In that case, there are no resource leaks.
+  RALL is the abbreviation of resource acquisition is initialization. The local variable should be tied to obeject lifetime. On the other hand, if a local variable is created within a scope, it should be destroyed as long as leaving the scope. In that case, there are no resource leaks.
   If a implmentation follows RAII, it benefits from following perspective.
-  1. Clean concept: local variable now is combined to the life cycle of the object. You don't need to worry about the destruction of the local variable because it detroies itself automatically as the object is destroyed.
+  1. Clean concept: local variable now is combined to the life cycle of the object. You don't need to worry about the destruction of the local variable because it detroys itself automatically as the object is destroyed.
   2. Exception safty: When exception occurs, the call stack would be broken. It has great chance to cause resource leak without the implmentation of RAII. A well-designed RAII could prevent this case.
   3. Immediation of resource releasing: GC will release resource automatically in the future, but RALL can guaruntee the resource would be released as long as the object is destroyed. In severe environment, it is better to release memory as quickly as possible.
 
