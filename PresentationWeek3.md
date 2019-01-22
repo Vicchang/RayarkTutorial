@@ -1,15 +1,15 @@
 # Week 3 C#
 ---
-* ##What’s different between struct and class?
+* ## What’s different between struct and class?
 
-    Category                     | Struct    | Class 
-    -----------------------------|-----------|-----------------------------------
-    Parameterless Constructor    | No        | Yes 
-    Type                         | Value     | Reference 
-    Sealed                       | Default   | Optional 
-    Abstract                     | No        | Yes
-    Inheritance                  | Interface | Interface, Class, Abstract Class
-    Dispose                      | No        | Yes
+  Category                     | Struct    | Class 
+  -----------------------------|-----------|-----------------------------------
+  Parameterless Constructor    | No        | Yes 
+  Type                         | Value     | Reference 
+  Sealed                       | Default   | Optional 
+  Abstract                     | No        | Yes
+  Inheritance                  | Interface | Interface, Class, Abstract Class
+  Dispose                      | No        | Yes
     
   1. Struct can't have explicit parameterless constrcutor.
   2. Struct is value type. Class is reference type.
@@ -19,13 +19,13 @@
   6. Struct can't dipose. Class can dipose.
   7. Struct support interface. Class support interface.
 
-* ##What happens if you assign a struct to an interface variable?
+* ## What happens if you assign a struct to an interface variable?
   Boxing would take place. Here is the definition from MSDN.
   
   > Boxing is the process of converting a value type to the type object or to any interface type implemented by this value type
   
-  The method in interface are define as virtual abstract. To resolve a virtual reference, vtable look up is required. Since there is no vtable in value type, compiler first boxs the value type into reference type and looks up later.
-  Boxing causes the generation of temprary object and drops the performance. Furthormore, it is easy to cause code defect. Here is the example.
+  The methods in interface are define as virtual abstract. To resolve a virtual reference, vtable look up is required. Since there is no vtable in value type, compiler first boxes the value type into reference type and looks up later.
+  Boxing causes the generation of temporary object and drops the performance. Furthormore, it is easy to cause code defect. Here is the example.
   ```C#
   class Program
   {
@@ -63,9 +63,9 @@
   }  
   ```
   
-* ##What’s different between abstract class and interface?
-* ##What is the benefits brought by using StringBuilder instead of direct string concatenation?
-* ##What does IDisposable interface do?
-* ##What’s the advantage / disadvantage between GC and reference counting?
-* ##What’s the difference among Interpreter, Compiler, and JIT? What’s the pros and cons of JIT?
-* ##Does delegate hold any reference?
+* ## What’s different between abstract class and interface?
+* ## What is the benefits brought by using StringBuilder instead of direct string concatenation?
+* ## What does IDisposable interface do?
+* ## What’s the advantage / disadvantage between GC and reference counting?
+* ## What’s the difference among Interpreter, Compiler, and JIT? What’s the pros and cons of JIT?
+* ## Does delegate hold any reference?
