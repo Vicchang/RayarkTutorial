@@ -1,11 +1,15 @@
 # Week 3 C#
 ---
 * ##What’s different between struct and class?
-    Age           | Time  | Food | Gold | Requirement
-    --------------|:-----:|-----:| ----:|------------------------
-    Feudal Age    | 02:10 |  500 |    0 | Dark Age building x 2
-    Castle Age    | 02:40 |  800 |  200 | Feudal Age building x 2
-    Imperial Age  | 03:30 | 1000 |  800 | Castle Age building x 2  
+
+                                 | Struct  | Class 
+    -----------------------------|:---------:|-----
+    Parameterless Constructor    | No        | Yes 
+    Type                         | Value     | Reference 
+    Sealed                       | Default   | Optional 
+    Abstract                     | No        | Yes
+    Inheritance                  | Interface | Interface, Class, Abstract Class
+    Dispose                      | No        | Yes
     
   1. Struct can't have explicit parameterless constrcutor.
   2. Struct is value type. Class is reference type.
