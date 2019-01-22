@@ -2,8 +2,8 @@
 ---
 * ##What’s different between struct and class?
 
-                                 | Struct  | Class 
-    -----------------------------|:---------:|-----
+    Category                     | Struct    | Class 
+    -----------------------------|-----------|-----------------------------------
     Parameterless Constructor    | No        | Yes 
     Type                         | Value     | Reference 
     Sealed                       | Default   | Optional 
