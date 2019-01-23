@@ -111,9 +111,9 @@
   Abstract Function            | No         | Yes           | No
   Virtual Function             | No         | Yes           | Yes
   Interface                    | Yes        | No            | No
-  Interface Inheritance        | Yes        | No            | No  
-  Abstract Class Inheritance   | Yes        | Yes           | Yes
-  Class Inheritance            | Yes        | Yes           | Yes
+  Interface Inheritance        | Yes        | Yes           | Yes  
+  Abstract Class Inheritance   | No         | Yes           | Yes
+  Class Inheritance            | No         | Yes           | Yes
   
   ```C#
   class Person
@@ -190,6 +190,99 @@
   3. Interface force all funcions to be abstract virtual.
   
 * ## What is the benefits brought by using StringBuilder instead of direct string concatenation?
+  To show the idea, we could look at the container definition of each class first.
+  
+  ```C#
+  [DefaultMember("Chars")]
+  public sealed class StringBuilder : ISerializable
+  {
+      ...
+      public char this[int index] { get; set; }
+      ...
+  }
+
+  [DefaultMember("Chars")]
+  public sealed class String : IEnumerable<char>, IEnumerable, IComparable, IComparable<String>, IConvertible, IEquatable<String>, ICloneable
+  {
+      ...
+      public char this[int index] { get; }   
+      ...
+  }
+  ```
+  
+  StringBuilder has accessor and mutator but string only has accessor. This leaves the clue that the author doesn't want any one to modify the value of string type. Let's keep look at the implmentation of funcions in class. I will take append as
+  example. Note that in String class, there is only concat function.
+  ```C#
+  public unsafe StringBuilder Append(char* value, int valueCount)
+  {
+      // We don't check null value as this case will throw null reference exception anyway
+      if (valueCount < 0)
+      {
+          throw new ArgumentOutOfRangeException("valueCount", Environment.GetResourceString("ArgumentOutOfRange_NegativeCount"));
+      }
+
+      // This case is so common we want to optimize for it heavily. 
+      int newIndex = valueCount + m_ChunkLength;
+      if (newIndex <= m_ChunkChars.Length)
+      {
+          ThreadSafeCopy(value, m_ChunkChars, m_ChunkLength, valueCount);
+          m_ChunkLength = newIndex;
+      }
+      else
+      {
+          // Copy the first chunk
+          int firstLength = m_ChunkChars.Length - m_ChunkLength;
+          if (firstLength > 0)
+          {
+              ThreadSafeCopy(value, m_ChunkChars, m_ChunkLength, firstLength);
+              m_ChunkLength = m_ChunkChars.Length;
+          }
+
+          // Expand the builder to add another chunk. 
+          int restLength = valueCount - firstLength;
+          ExpandByABlock(restLength);
+          Contract.Assert(m_ChunkLength == 0, "Expand did not make a new block");
+
+          // Copy the second chunk
+          ThreadSafeCopy(value + firstLength, m_ChunkChars, 0, restLength);
+          m_ChunkLength = restLength;
+      }
+      VerifyClassInvariant();
+      return this;
+  }  
+  
+  public static String Concat(String str0, String str1) {
+      Contract.Ensures(Contract.Result<String>() != null);
+      Contract.Ensures(Contract.Result<String>().Length ==
+          (str0 == null ? 0 : str0.Length) +
+          (str1 == null ? 0 : str1.Length));
+      Contract.EndContractBlock();
+
+      if (IsNullOrEmpty(str0)) {
+          if (IsNullOrEmpty(str1)) {
+              return String.Empty;
+          }
+          return str1;
+      }
+
+      if (IsNullOrEmpty(str1)) {
+          return str0;
+      }
+
+      int str0Length = str0.Length;
+      
+      String result = FastAllocateString(str0Length + str1.Length);
+      
+      FillStringChecked(result, 0,        str0);
+      FillStringChecked(result, str0Length, str1);
+      
+      return result;
+  }  
+  ```
+  Comparing the return object, stringbuilder always return "this" while string always return "result", which is a temparty object. Any mutation to string would cause generation of new object. Stringbuilder only generates new object
+  as long as full container. The design of string is to guaruntee it is a immutable object and hence, thread safe. To conclude, in order to save performance, if you would frequently mutate a string, it is recommanded to use string builder.
+  If not, using string to guaruntee thread safe.
+  
 * ## What does IDisposable interface do?
 * ## What’s the advantage / disadvantage between GC and reference counting?
 * ## What’s the difference among Interpreter, Compiler, and JIT? What’s the pros and cons of JIT?
