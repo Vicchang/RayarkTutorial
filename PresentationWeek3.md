@@ -280,7 +280,7 @@
   }  
   ```
   Comparing the return object, stringbuilder always return "this" while string always return "result", which is a temparty object. Any mutation to string would cause generation of new object. Stringbuilder only generates new object
-  as long as full container. The design of string is to guaruntee it is a immutable object and hence, thread safe. To conclude, in order to save performance, if you would frequently mutate a string, it is recommanded to use string builder.
+  as long as full container. The design of string is to guaruntee it is a immutable object and thread safe. To conclude, in order to save performance, if you would frequently mutate a string, it is recommanded to use stringbuilder.
   If not, using string to guaruntee thread safe.
   
 * ## What does IDisposable interface do?
