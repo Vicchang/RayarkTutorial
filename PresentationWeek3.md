@@ -104,7 +104,7 @@
 * ## What’s different between abstract class and interface?
 
   Category                     | Interface  | Abstract Class| Class 
-  -----------------------------|------------|----------------------------------
+  -----------------------------|------------|---------------|------------------
   New                          | No         | No            | Yes   
   Constructor                  | No         | Yes           | Yes 
   Function                     | No         | Yes           | Yes 
@@ -114,6 +114,7 @@
   Interface Inheritance        | Yes        | No            | No  
   Abstract Class Inheritance   | Yes        | Yes           | Yes
   Class Inheritance            | Yes        | Yes           | Yes
+  
   ```C#
   class Person
   {
