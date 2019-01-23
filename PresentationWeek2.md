@@ -176,7 +176,7 @@
       Console.WriteLine("A is " + A._a);            // A is 2
   }
   ```
-  ~~If string is not immutable type, the console should print "strA is 656". That is terrible. A class is just share the string to other class, but somehow, other class can modify the string and effect the sender class. Fortunately, it shows "str is 123" due to the string in fucntion refers to the new string, instead of, modifying the object it refering. ~~
+  ~~If string is not immutable type, the console should print "strA is 656". That is terrible. A class is just share the string to other class, but somehow, other class can modify the string and effect the sender class. Fortunately, it shows "str is 123" due to the string in fucntion refers to the new string, instead of, modifying the object it refering~~
   
 * ## How coroutine works behind the scene? What is the benefit of coroutines over state machines?
   Let's talk about what is coroutine first. 
