@@ -25,7 +25,7 @@
   > Boxing is the process of converting a value type to the type object or to any interface type implemented by this value type
   
   A reference type function call always use "callvirt", which looks up virtual table for specific method, in IL. However, a value type function call use "call" which directly accesses method without vitrual table look-up. In order to support 
-  table look-up, C# compiler box the value type to reference type. However, "box" doesn't make the value type into reference type. It just copies all the value from value type into an managed heap obejct and forces the reference type to refer to 
+  table look-up, C# compiler boxes the value type to reference type. However, "box" doesn't make the value type into reference type. It just copies all the value from value type into an managed heap obejct and forces the reference type to refer to 
   that object. Hence, it is easy to cause bugs without caution. Here is an example.
   
   ```C#
@@ -102,6 +102,92 @@
   } // end of method Program::Main
   ```
 * ## What’s different between abstract class and interface?
+
+  Category                     | Interface  | Abstract Class| Class 
+  -----------------------------|------------|----------------------------------
+  New                          | No         | No            | Yes   
+  Constructor                  | No         | Yes           | Yes 
+  Function                     | No         | Yes           | Yes 
+  Abstract Function            | No         | Yes           | No
+  Virtual Function             | No         | Yes           | Yes
+  Interface                    | Yes        | No            | No
+  Interface Inheritance        | Yes        | No            | No  
+  Abstract Class Inheritance   | Yes        | Yes           | Yes
+  Class Inheritance            | Yes        | Yes           | Yes
+  ```C#
+  class Person
+  {
+      public Person() { }                     // Ok constructor
+      public void ConcreteWalk() { }          // OK concrete function
+      //public abstract void AbstractWalk();  // compile error abstract function 
+      public virtual void VirtualWalk() { }   // OK virtual function
+      //void InterfaceWalk();                 // OK interfacce
+  }
+
+  abstract class PersonBase
+  {
+      public PersonBase() { }                 // OK constructor
+      public void ConcreteWalk() { }          // OK concrete function
+      public abstract void AbstractWalk();    // OK abstract function
+      public virtual void VirtualWalk() { }   // OK vitural function
+      //void InterfaceWalk();                 // OK interface 
+  }
+
+  interface IPerson
+  {
+      //IPerson()                             // compile error constructor
+      //public void ConcreteWalk() { }        // compile error concrete function
+      //public abstract void AbstractWalk();  // compile error abstract function
+      //public virtual void VirtualWalk() { } // compile error virtual function
+      void InterfaceWalk();                   // OK
+  }  
+  ```
+  
+  Let's look at each defintion in IL.
+  ```IL
+  .class public auto ansi beforefieldinit Mast.Person
+       extends [System.Runtime]System.Object
+  {
+  } // end of class Mast.Person
+
+  .class interface public abstract auto ansi Mast.IPerson
+  {
+  } // end of class Mast.IPerson
+
+  .class public abstract auto ansi beforefieldinit Mast.PersonBase
+       extends [System.Runtime]System.Object
+  {
+  } // end of class Mast.PersonBase
+  ```
+  
+  You can find that interface has the attribute of abstract. Hence, you could think about interface is a subset of abstract class. Let's look at the function IL.
+  
+  ```IL
+  .method public hidebysig newslot virtual 
+        instance void  VirtualWalk() cil managed
+  {
+    // 程式碼大小       2 (0x2)
+    .maxstack  8
+    IL_0000:  nop
+    IL_0001:  ret
+  } // end of method Person::VirtualWalk
+  
+  .method public hidebysig newslot abstract virtual 
+        instance void  InterfaceWalk() cil managed
+  {
+  } // end of method IPerson::InterfaceWalk
+  
+  .method public hidebysig newslot abstract virtual 
+        instance void  AbstractWalk() cil managed
+  {
+  } // end of method PersonBase::AbstractWalk
+  ```
+  
+  The functions in interface are all predefined abstract virtual, while in abstract class only abstract function is defined abstract virtual. Here is the conclusion. Interface is a subset of abstract class and is more constrained.
+  1. Interface can't have construtor.
+  2. Interface can't inherit other class, except interface.
+  3. Interface force all funcions to be abstract virtual.
+  
 * ## What is the benefits brought by using StringBuilder instead of direct string concatenation?
 * ## What does IDisposable interface do?
 * ## What’s the advantage / disadvantage between GC and reference counting?
