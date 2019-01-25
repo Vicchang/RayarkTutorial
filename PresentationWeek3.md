@@ -412,4 +412,35 @@
   ```
   
 * ## What’s the difference among Interpreter, Compiler, and JIT? What’s the pros and cons of JIT?
+  * Compiler is a progress to transfer source code to machine code. During the transfromation, scanner, parser, optimizer and ..etc occur in order to generate high performance machine code. It is important to know that all of the progresses happened when you build your 
+    source code, instead of executing the program. Hence, compiler is also called "static compilation". C++ is one of the example.
+    Pros: 
+    1. Better execution performance since os only needs to excute machine code without any other effert.
+    2. Better optimization on static code.
+    Cons:
+    1. Non-portible.
+    2. Lack of runtime optimization.
+    3. Huge compile time.
+    
+  * Interpreter has the same goal as compiler. However, the time of transfering source code to machine code is different. The progress takes place when you execute the program. The interpreter will scan, parse, optimize the source code and futhermore 
+    optimize the runtime objects. It is so called "dynamic compilation". Python is one of the classic example.
+    Pros:
+    1. Runtime optimization
+    2. Portable
+    3. No compile time.
+    Cons:
+    1. Less execution speed.
+    2. Less static source code optimization.
+    
+  * JIT is known as "Just in Time Compilation". Basicly, it is the hybrid of compiler and interpreter. It has pros and cons of both compiler and interpreter. A JIT will first compile source code to bytecode. After that, the bytecode is interpreted by 
+    virtural machine. In theory, it could reach the performance of compiler or even better. C# and Java are the representattion of JIT.
+    Pros:
+    1. Portable
+    2. Less compile time
+    3. Good execution performance
+    4. Runtime optimization.
+    5. Good static source code optimization.
+    Cons:
+    
+    
 * ## Does delegate hold any reference?
