@@ -283,7 +283,133 @@
   as long as full container. The design of string is to guaruntee it is a immutable object and thread safe. To conclude, in order to save performance, if you would frequently mutate a string, it is recommanded to use stringbuilder.
   If not, using string to guaruntee thread safe.
   
-* ## What does IDisposable interface do?
 * ## What’s the advantage / disadvantage between GC and reference counting?
+  I'd like to take Boehm Garbage Collection as example, since unity currently use this GC. To start with, GC is a central control system. You can image that that there is a guy who monitor your process intervally. When he looks at your 
+  process, he stops the process. After that, he takes two step to finish the monitor. First, he checks if there is any resource dangling. Second, he deletes the dangling resource. This step is what we call "Mark and Sweep". In a GC system,
+  every tiem when you new a heap object, it would be recorded. You could realize it as a tree. There would be many trees in a process. GC checks all the resource in memory and use DFS to search the tree. If
+  any resource is not reachable, GC marks it as deletable. This process is called "Mark". Next, GC starts to delete all the resouces which are deletable. This process is called "Sweep". This is the basic idea of Boehm Garbage Collection.
+  
+  "Automatic Referency Counting" is another memory management system. It is quite a simple idea. Every objects has a default variable, reference count. Any time when a object is refered by others, the reference count would automatically increse.
+  Any time when a object is not refered by others, the reference count decrease. As long as the reference count is zero, the object is destroyed immediately. 
+  
+  Here is the simple comparison between these two.
+  
+  Category                     | GC         | ARC    
+  -----------------------------|------------|--------
+  Process Memory Usage         | High       | Low         
+  Thread Memory Usage          | Low        | Hgih
+  Overall Performace           | Bad?       | Good?
+  Application Performance      | Good       | Bad
+  Retain Cycle                 | No         | Yes
+  Realtime Destruction         | No         | Yes
+  
+  However, as the time passed by, there are more and more features implemented in GC and ARC. Take .Net 4.7 as example. It implements GC with generation and compacting. Generation is to help GC now the states or categories of the objects. For example, 
+  long term object may be occupied in one specific generation while short term object is on the others. GC would handle different generation by different time in order to cost less resoucre. 
+  
+  ARC is processing, too. It mentained a "keyword" to handle retain cycle issue. However, it still needs engineers knowledge.
+* ## What does IDisposable interface do?
+  IDisposable and Finalizer has similar functionality. Both of them are used for releasing unmanaged heap. An unmanged heap contains file system, GUI+, COM object and ...etc. As we mentioned, GC is there to help us control managed heap. A process would not only have managed heap but also unmanaged heap. IDisposable and 
+  Finalizer is to help GC handle with unmanaged heap. Here is how GC works from MSDN.
+  1. The garbage collector searches for managed objects that are referenced in managed code.
+  2. The garbage collector tries to finalize objects that are not referenced.
+  3. The garbage collector frees objects that are not referenced and reclaims their memory.
+  
+  The interesting thing is when you finalize an unmanaged object, the memory is not reclaims immediately. The memory isn't reclaimed until next GC. It causes performacne overhead and unusage memory stuck for more time. In order to sovle the issue, 
+  IDisposable is provided. In IDisposable, you could free the unmanged object and then suppress the finalization. Then, GC would reclaim the memory without waiting for finalization. The implmentation of IDisposible interface has become a pattern,
+  dipose pattern, which is documented in MSDN. Here is the example.
+  ```C#
+  // base class demostratation
+  class FileHelper : IDisposable
+  {
+      private bool _disposed = false;
+      private int _offset = 0;
+      private FileStream _file; // unmanaged object
+      public FileHelper(string strPath)
+      {
+          _file = new FileStream(strPath, FileMode.OpenOrCreate);
+      }
+
+      ~FileHelper()  // finalizer as safe net
+      {
+          Dispose(false);
+      }
+
+      public void Write(string strInput)
+      {
+          _file.Write(Encoding.ASCII.GetBytes(strInput), 0, strInput.Length);
+          _offset += strInput.Length;
+      }
+
+      public void Dispose()
+      {
+          Dispose(true);
+          GC.SuppressFinalize(this);
+      }
+
+      protected virtual void Dispose(bool disposing)
+      {
+          if (_disposed) return;
+
+          if (disposing)
+          {
+              // Free any manage objects here.
+          }
+
+          _file.Dispose(); // dipose unmanaged object
+
+          _disposed = true;
+      }
+  }
+  
+  // derived class demonstration
+  class DerivedFileHelper : FileHelper
+  {
+      bool _disposed = false;
+      public DerivedFileHelper() : base(".\\DerivedFileHelper.txt") {}
+
+      ~DerivedFileHelper() // finalizer as safe net
+      {
+          Dispose(false);
+      }
+      
+      public void DWrite()
+      {
+          base.Write("Derived class is writing");
+      }
+
+      protected override void Dispose(bool disposing)
+      {
+          if (_disposed) return;
+
+          if (disposing)
+          {
+              // Free any manage objects here.
+          }
+
+          _disposed = true;
+
+          base.Dispose(disposing); // dipose base class object
+      }
+  }
+  
+  // Function call
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          using (DerivedFileHelper DFH = new DerivedFileHelper())
+          {
+              DFH.DWrite();
+          }
+
+          using (FileHelper FH = new FileHelper(".\\Filehelper.txt"))
+          {
+              FH.Write("FH is writing\r\n");
+              FH.Write("FH is writing");
+          }
+      }
+  }  
+  ```
+  
 * ## What’s the difference among Interpreter, Compiler, and JIT? What’s the pros and cons of JIT?
 * ## Does delegate hold any reference?
