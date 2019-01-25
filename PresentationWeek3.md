@@ -418,6 +418,7 @@
     Pros: 
     1. Better execution performance since os only needs to excute machine code without any other effert.
     2. Better optimization on static code.
+    
     Cons:
     1. Non-portible.
     2. Lack of runtime optimization.
@@ -448,10 +449,11 @@
     Cons:
     
 * ## Does delegate hold any reference?
-  According to delegate class, delegate hold reference. Here is the sample of source code.
+  The answer is yes. According to delegate class, delegate holds reference. Here is the sample of source code.
   ```C#
   public abstract class Delegate : ICloneable, ISerializable
   {
+      ...
       //
       // 摘要:
       //     Gets the method represented by the delegate.
@@ -473,6 +475,7 @@
       //     delegate represents an instance method; null if the delegate represents a static
       //     method.
       public object Target { get; }
+      ...
   }
   ```
   Since delegate holds reference, adding anonymous method and lambda expresssion must be carefule. Otherwise, it will cause memory leak.
