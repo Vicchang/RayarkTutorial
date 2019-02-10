@@ -47,22 +47,18 @@
 * ## Explain forward rendering path and deferred rendering path.
   Both foward and deffered rendering path are here to define the rendering pipeline. As mentioned above, there are many procedures in rendering pipeline.
   Different procedures can have different effect and performance. The difference between two of them is the handling of light. Here are some details.
-
-  1. Foward Rendering Path
-  
-	* Limit light source to 4 lights. 
-	* The rest of the lights is handled by SH, which has less performance effect.
-	* Can render transparent objects.
-	* Due to less of light source, the object is less realistic.
-  
-  2. Deffered Rendering Path
-  
-	* Unlimited light source.
-	* Can have full controll of lights.
-	* More reference to light cause more performance impact.
-	* Object display is more real.
-	* Can't render transparent objects.
-	* Lack of support anti-aliasing.
+  * Foward Rendering Path
+	1. Limit light source to 4 lights. 
+	2. The rest of the lights is handled by SH, which has less performance effect.
+	3. Can render transparent objects.
+	4. Due to less of light source, the object is less realistic.
+  * Deffered Rendering Path
+	1. Unlimited light source.
+	2. Can have full controll of lights.
+	3. More reference to light cause more performance impact.
+	4. Object display is more real.
+	5. Can't render transparent objects.
+	6. Lack of support anti-aliasing.
   
 * ## Explain texture compress and its benefit. Why JPEG is not adopted when compressing textures? 
   > Texture compression is a specialized form of image compression designed for storing texture maps in 3D computer graphics rendering systems
