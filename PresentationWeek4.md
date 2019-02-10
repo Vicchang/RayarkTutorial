@@ -20,6 +20,14 @@
 	This process focuses on pixel drawing. With the data from geometry, pixel shader can draw coloer by light, normal, tagent and texture.
   
 * ## Explain how vertex shader and pixel shader works.
+  * Vertex Shader
+	Takes a single vertex and can adjust it, for example, transformation and calculation but not create new points/vertices. Vertex shader can be used to work out complex 
+	vertex lighting calculation as a setup for the next stage and/or warp the points around (wobble, scale, etc).
+	
+  * Pixel Shader
+	Calculates the colour of a pixel on the screen based on what the vertex shader passes in, bound textures and user-added data. This cannot read the current screen at all, 
+	just work out what colour/transparency that pixel should be for the current primitive.	
+	
 * ## Explain Blinn-Phong shading.
 * ## Explain forward rendering path and deferred rendering path.
 * ## Explain texture compress and its benefit. Why JPEG is not adopted when compressing textures?
