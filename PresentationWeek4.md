@@ -93,4 +93,3 @@
   After that, we then Rasters the vertices and then do pixel shader. With skinned mesh, we now add one more step between object coordinate transformation to world coordinate transformation.
   Bone offset is added to each specific vetices. Hence, after transforming to world coordinata, it is not the position of vetex on mesh but the position of vetex on bone. With this skill,
   as long as you move the bones, the mesh or the vertices would move, too. This is why we say skinned mesh is relative to skeleton animation. 
-* ## Training Project
