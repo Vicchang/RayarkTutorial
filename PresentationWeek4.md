@@ -49,18 +49,20 @@
   Different procedures can have different effect and performance. The difference between two of them is the handling of light. Here are some details.
 
   1. Foward Rendering Path
-  * Limit light source to 4 lights. 
-  * The rest of the lights is handled by SH, which has less performance effect.
-  * Can render transparent objects.
-  * Due to less of light source, the object is less realistic.
+  
+	* Limit light source to 4 lights. 
+	* The rest of the lights is handled by SH, which has less performance effect.
+	* Can render transparent objects.
+	* Due to less of light source, the object is less realistic.
   
   2. Deffered Rendering Path
-  * Unlimited light source.
-  * Can have full controll of lights.
-  * More reference to light cause more performance impact.
-  * Object display is more real.
-  * Can't render transparent objects.
-  * Lack of support anti-aliasing.
+  
+	* Unlimited light source.
+	* Can have full controll of lights.
+	* More reference to light cause more performance impact.
+	* Object display is more real.
+	* Can't render transparent objects.
+	* Lack of support anti-aliasing.
   
 * ## Explain texture compress and its benefit. Why JPEG is not adopted when compressing textures? 
   > Texture compression is a specialized form of image compression designed for storing texture maps in 3D computer graphics rendering systems
