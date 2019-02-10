@@ -1,7 +1,23 @@
 # Computer Graphics
 ---
 * ## Explain real-time rendering pipeline.
-  https://en.wikipedia.org/wiki/Graphics_pipeline
+  Real-time rendering pipeline is a series of procedures to transform to 3D objects to 2D device view. There are many and many steps and we can divide them
+  into three major process, application, geometry and rasterization.
+  
+  ![Rendering Pipeline](https://github.com/Vicchang/RayarkTutorial/blob/master/RenderingPipeline.jpg)
+  
+  * Application:
+	This process is to handle physical logics, including object movement, collision detection, calculation, algorithm and ...etc. Takng unity as example,
+	all the C# sharp script and gameobject construction are happeneed here.
+	
+  * Geometry:
+	This process has many steps inside. The goal of this process is to transform 3D object to rasterization data and let pixel shader to draw on device screen.
+	The process includes following steps, model transformation, camera transformation, lighting, projection transformation, clipping, and window-view transformation.
+	
+  ![Geometry Diagram](https://github.com/Vicchang/RayarkTutorial/blob/master/GeometryDiagram.jpg)
+  
+  * Rasterization:
+	This process focuses on pixel drawing. With the data from geometry, pixel shader can draw coloer by light, normal, tagent and texture.
   
 * ## Explain how vertex shader and pixel shader works.
 * ## Explain Blinn-Phong shading.
