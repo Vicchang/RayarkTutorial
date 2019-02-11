@@ -46,14 +46,21 @@
   3. Phong is more realistic than Blinn-Phong.
   
 * ## Explain forward rendering path and deferred rendering path.
-  Both foward and deffered rendering path are here to define the rendering pipeline. As mentioned above, there are many procedures in rendering pipeline.
-  Different procedures can have different effect and performance. The difference between two of them is the handling of light. Here are some details.
   * Foward Rendering Path
+  
+    In Forward Rendering, some number of brightest lights that affect each object are rendered in fully per-pixel lit mode. Then, up to 4 point lights are calculated per-vertex. 
+    The other lights are computed as Spherical Harmonics (SH), which is much faster but is only an approximation.
+    
 	1. Limit light source to 4 lights. 
 	2. The rest of the lights is handled by SH, which has less performance effect.
 	3. Can render transparent objects.
 	4. Due to less of light source, the object is less realistic.
+    
   * Deffered Rendering Path
+  
+    When using deferred shading, there is no limit on the number of lights that can affect a GameObject. All lights are evaluated per-pixel, which means that they all interact correctly 
+    with normal maps, etc. Additionally, all lights can have cookies and shadows.
+    
 	1. Unlimited light source.
 	2. Can have full controll of lights.
 	3. More reference to light cause more performance impact.
