@@ -20,7 +20,8 @@
   
   * Rasterization
   
-	This process focuses on pixel drawing. With the data from geometry, pixel shader can draw coloer by light, normal, tagent and texture.
+	This progress takes an image described in a vector graphics format (shapes) and converting it into a raster image ( A series of pixels, dots or lines). Pixel shader takes
+    action on this progress.
   
 * ## Explain how vertex shader and pixel shader works.
   * Vertex Shader
@@ -34,14 +35,14 @@
 	just work out what colour/transparency that pixel should be for the current primitive.	
 	
 * ## Explain Blinn-Phong shading.
-  Blinn-Phong shading is a algorithm for simulating light reflection. People needs to simulate light in order to make objects in screen more realistic.
-  Hence, Phone model was invented. It can highly simulate the light and let object more natural. The idea of phong model is to calculate the reflextion
-  vector of light and product with object normal so as to calculate the percentage of colour brightness. However, the effor of calculating the 
-  reflextion vector is high. Blinn-Phong shading was addressed. Blinn-Phong takes half way vector to represent the light reflextion vector and to calculate
-  the percentage of coluor brightness. There are three difference bewteen Phone and Blinn-Phong.
+  Blinn-Phong shading is an algorithm for simulating light reflection. People needs to simulate light in order to make objects in screen more realistic.
+  At first, Phone model was invented. It can highly simulate the light and let object more natural. The idea of phong model is to calculate the reflextion
+  vector of light and then product the reflextion vectgor with object normal so as to calculate the percentage of colour brightness. However, the effor of calculating the 
+  reflextion vector is high. Blinn-Phong shading was then addressed. Blinn-Phong takes half way vector to represent the light reflextion vector and to calculate
+  the percentage of colour brightness. There are three differences bewteen Phone and Blinn-Phong.
   
   1. Blinn-Phong has less performance impact than Phong.
-  2. Blinn-Phong is introduced to handle the issue of negative production vector of light reflection vector and eye view in Phong model.
+  2. Blinn-Phong is introduced to handle the issue of negative production vector of light reflection vector and eye direction in Phong model.
   3. Phong is more realistic than Blinn-Phong.
   
 * ## Explain forward rendering path and deferred rendering path.
@@ -56,7 +57,7 @@
 	1. Unlimited light source.
 	2. Can have full controll of lights.
 	3. More reference to light cause more performance impact.
-	4. Object display is more real.
+	4. The display of objects is more real.
 	5. Can't render transparent objects.
 	6. Lack of support anti-aliasing.
   
