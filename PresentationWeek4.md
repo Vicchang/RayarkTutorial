@@ -21,7 +21,7 @@
   * Rasterization
   
 	This progress takes an image described in a vector graphics format (shapes) and converting it into a raster image ( A series of pixels, dots or lines). Pixel shader takes
-    action on this progress.
+    action after this progress.
   
 * ## Explain how vertex shader and pixel shader works.
   * Vertex Shader
@@ -91,6 +91,6 @@
 * ## How does Skinned Mesh work?
   > Skinned Mesh is designed to deform mesh in order to create animation. Typically, skinned mesh is come up with skeleton animation.
   While vertex shader stage, we can transform vertices to other positions. Usually, we transfrom vertices from object coordinate to world coordinate, camera coordinate and device coordinate.
-  After that, we then Rasters the vertices and then do pixel shader. With skinned mesh, we now add one more step between object coordinate transformation to world coordinate transformation.
+  After that, we then rasters the vertices and then do pixel shader. With skinned mesh, we now add one more step between object coordinate transformation to world coordinate transformation.
   Bone offset is added to each specific vetices. Hence, after transforming to world coordinata, it is not the position of vetex on mesh but the position of vetex on bone. With this skill,
   as long as you move the bones, the mesh or the vertices would move, too. This is why we say skinned mesh is relative to skeleton animation. 
